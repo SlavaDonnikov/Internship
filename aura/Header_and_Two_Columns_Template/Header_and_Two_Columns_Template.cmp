@@ -1,0 +1,30 @@
+<aura:component implements="lightning:recordHomeTemplate" description="Custom template with header, footer and two columns." access="public">
+  <aura:attribute name="header" type="Aura.Component[]" />
+  <aura:attribute name="leftColumn" type="Aura.Component[]" />
+  <aura:attribute name="rightColumn" type="Aura.Component[]" />
+
+  <div>
+    <!-- HEADER -->
+    <div>
+      <lightning:layout horizontalAlign="spread">
+        <lightning:layoutItem flexibility="grow" class="slds-m-bottom--small">
+                {! v.header }
+        </lightning:layoutItem>
+      </lightning:layout>
+    </div>
+    <!--/ HEADER -->
+
+    <!-- BODY -->
+    <div>
+      <lightning:layout horizontalAlign="spread">
+        <lightning:layoutItem flexibility="grow" size="3" class="slds-m-right--small" largeDeviceSize="3" mediumDeviceSize="1.5">
+                {! v.leftColumn }
+        </lightning:layoutItem>
+        <lightning:layoutItem flexibility="grow" class="slds-p-right--small" size="9" largeDeviceSize="9" mediumDeviceSize="4.5">
+                {! v.rightColumn }
+        </lightning:layoutItem>
+      </lightning:layout>
+    </div>
+    <!--/ BODY -->
+  </div>
+</aura:component>

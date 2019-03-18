@@ -1,0 +1,39 @@
+<aura:component controller="MetadataProcessingController" implements="flexipage:availableForAllPageTypes" access="public" description="Transfer Tool">
+  <aura:attribute name="minRows" type="Integer" default="1"/>
+  <aura:attribute name="maxRows" type="Integer" default="100"/>
+  <aura:attribute name="availableOptions" type="String" default="Available Options" required="true"/>
+  <aura:attribute name="selectedOptions" type="String" default="Selected Options" required="true"/>
+  <aura:attribute name="componentLabel" type="String" required="true" default="Label" />
+  <aura:attribute name="componentKey" type="String" required="true" default="undefined" description="See description in the corresponding aura:design file."/>
+
+  <aura:attribute name="listOptions" type="List" default="[]"/>
+  <aura:attribute name="selectedValues" type="List" default="[]"/>
+
+  <aura:handler event="c:sendSObjectEvent" action="{! c.receiveSObject }"/>
+
+  <lightning:layout multipleRows="false" >
+    <lightning:layoutItem flexibility="grow" size="9" largeDeviceSize="9" mediumDeviceSize="4.5">
+      <lightning:dualListbox name="Transfer Tool"
+                             label= "{! v.componentLabel }"
+                             sourceLabel="{! v.availableOptions }"
+                             selectedLabel="{! v.selectedOptions }"
+                             options="{! v.listOptions }"
+                             value="{! v.selectedValues }"
+                             min="{! v.minRows }"
+                             max="{! v.maxRows }"
+                             onchange="{! c.handleChange }"/>
+    </lightning:layoutItem>
+    <!--<lightning:layoutItem padding="arount-small" flexibility="grow" size="3" largeDeviceSize="3" mediumDeviceSize="1">-->
+      <!--<div class="slds-box">-->
+        <!--<ul>-->
+          <!--<aura:iteration items="{! v.selectedValues }" var="val">-->
+            <!--<li>-->
+              <!--{!val}-->
+            <!--</li>-->
+          <!--</aura:iteration>-->
+        <!--</ul>-->
+      <!--</div>-->
+    <!--</lightning:layoutItem>-->
+  </lightning:layout>
+
+</aura:component>

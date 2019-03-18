@@ -1,0 +1,13 @@
+<design:component label="Select lightning:dualListbox">
+  <design:attribute name="availableOptions" label="Available Options"/>
+  <design:attribute name="selectedOptions" label="Selected Options"/>
+  <design:attribute name="minRows" label="Min Rows Number"/>
+  <design:attribute name="maxRows" label="Max Rows Number"/>
+  <design:attribute name="componentLabel" label="Label" />
+  <design:attribute name="componentKey" label="Key to interact with 'sObjectList' or 'sObject Fields And It's Description'."
+                    description="When creating a new lightning page, three identical keys are created.
+                    One key for 'sObjectList' component, second key for 'sObject Fields And It's Description' component and third key for 'Transfer Tool' component.
+                    That ensures clear 'APPLICATION' type event routing if more then one identical lightning page with this three components exist.
+                    This attribute is required. You must specify key name.
+                    The default value is 'undefined' that means no one event will be handled."/>
+</design:component>

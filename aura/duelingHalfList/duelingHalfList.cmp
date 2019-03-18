@@ -1,0 +1,55 @@
+<aura:component controller="MetadataProcessingController" description="List for displaying fields of the selected sObject.">
+  <aura:attribute name="label" type="String" default="Please enter the label" required="true" description="User-selectable label above the list (comes from parent component)."/>
+
+  <!-- Massive where stored selected (and marked) fields -->
+  <aura:attribute name="selectedFields" type="String[]" />
+
+  <!-- transfer COMPONENT registerEvent's -->
+  <aura:registerEvent name="transferSeveralFields" type="c:transferFieldsEvent"/>
+  <aura:registerEvent name="transferAllFields" type="c:transferFieldsEvent"/>
+
+  <!-- on sObject change -->
+  <aura:attribute name="sObjectFields" type="String[]"/>
+  <aura:method name="onSObjectChange" action="{! c.onSObjectChange }">
+    <aura:attribute name="sObjectFieldsMethodParam" type="String[]"/>
+  </aura:method>
+
+  <!-- on several fields forward/back button's press -->
+  <aura:method name="onMoveSeveralFieldsButtonPress" action="{! c.onMoveSeveralFieldsButtonPress }">
+    <aura:attribute name="list" type="String"/>
+  </aura:method>
+
+  <!-- on all fields forward/back button's press -->
+  <aura:method name="onMoveAllFieldsButtonPress" action="{! c.onMoveAllFieldsButtonPress }">
+    <aura:attribute name="list" type="String"/>
+  </aura:method>
+
+  <!-- when get several fields as a second list -->
+  <aura:method name="onReceivingTransferredFields" action="{! c.onReceivingTransferredFields }">
+    <aura:attribute name="transferredFields" type="String[]"/>
+  </aura:method>
+
+  <!-- when get all fields as a second list -->
+  <aura:method name="onReceivingTransferredFieldsAll" action="{! c.onReceivingTransferredFieldsAll }">
+    <aura:attribute name="transferredFields" type="String[]"/>
+  </aura:method>
+
+  <div class="slds-scope">
+    <div class="slds-m-left--xx-small slds-m-bottom_xx-small">
+      <label class="slds-form-element__label">{! v.label }</label>
+    </div>
+    <div class="slds-scrollable_y no-webkit-focus lightning-select-style" tabindex="0">
+      <table role="grid" class="slds-table slds-table_fixed-layout slds-table_cell-buffer slds-no-row-hover">
+        <tbody onclick="{! c.onSelect }">
+        <aura:iteration items="{! v.sObjectFields }" var="sObjectField">
+          <tr>
+            <th aura:id="thId" data-id="{!sObjectField}" scope="row">
+              <div class="slds-truncate" data-id="{!sObjectField}">{! sObjectField }</div>
+            </th>
+          </tr>
+        </aura:iteration>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</aura:component>

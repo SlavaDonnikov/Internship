@@ -1,0 +1,36 @@
+<aura:component controller="MetadataProcessingController" access="public" description="List for displaying fields of the selected sObject.">
+  <aura:attribute name="label" type="String" default="Please enter the label" required="true" description="User-selectable label above the list (comes from parent component)."/>
+  <aura:attribute name="componentKey" type="String" default="undefined" required="true" description="See description in the c:sObjectFieldsAndDetails.design file."/>
+
+  <aura:attribute name="sObjectName" type="String" description="Name of the selected sObject which field now in this list"/>
+  <aura:handler name="change" value="{! v.sObjectName }" action="{! c.onSObjectChange }"/>
+
+  <aura:attribute name="sObjectFields" type="String[]" description="List of all fields of the selected sObjects" />
+
+  <!-- Application event handler -->
+  <aura:handler event="c:sendSObjectEvent" action="{! c.getSObjectFields }"/>
+
+  <!-- Component event register -->
+  <aura:registerEvent name="sendSelectedField" type="c:sendFieldEvent"/>
+  <aura:registerEvent name="sObjectChange" type="c:sObjectChange" />
+
+  <div class="slds-scope">
+    <div class="slds-align_absolute-center slds-m-bottom_xx-small">
+      <label class="slds-form-element__label">{! v.label }</label>
+    </div>
+    <div class="slds-scrollable_y no-webkit-focus lightning-select-style" tabindex="0">
+      <table role="grid" class="slds-table slds-table_fixed-layout slds-table_cell-buffer slds-no-row-hover">
+        <tbody onclick="{! c.showFieldsDescription }">
+        <aura:iteration items="{! v.sObjectFields }" var="sObjectField">
+          <tr>
+            <th aura:id="thId" data-id="{!sObjectField}" scope="row">
+              <div class="slds-truncate" data-id="{!sObjectField}" >{! sObjectField }</div>
+            </th>
+          </tr>
+        </aura:iteration>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</aura:component>

@@ -1,0 +1,280 @@
+<!-- In the style definitions, 'background-image:none' is required to override the default image with the
+specified color. You can also provide your own image with .css styles. -->
+
+<apex:page controller="orgMetadataController">
+    <apex:form >
+        
+        <!-- Page .css styles -->
+        <style>
+        .activeTab { color:black; background-image:none}
+        .inactiveTab {  color:black; background-image:none}
+            
+        .rootTab { color:white; font-size: 14px; background-image:none }
+        .standartSObjectsTab { background-color: #1BA261;  }
+        .customSObjectsTab   { background-color: #FF8080;  }
+            
+        .nestedStandartTab { font-size: 12px; color: #004d1a; font-weight: bold !important; background: white; }
+        .nestedCustomTab { font-size: 12px; color: #990000; font-weight: bold !important; background: white; }
+        
+            
+        .textLabelStandart { font-weight: bold !important; color: #1BA261; font-size: 12px; }
+        .textLabelCustom { font-weight: bold !important; color: #FF8080; font-size: 12px; }
+            
+        .pageBlockTableRowStyle { font-size: 12px !important; text-align: center !important; }
+        .pageBlockTableColumnHeaderStyle { font-size: 14px !important; text-align: center !important; }         
+            
+        .column_one { width: 15%; vertical-align: top; text-align: center; padding-left: 10px; padding-right: 10px; }
+        .column_two { width: 85%; padding-left: 25px; vertical-align: top; text-align: center;} 
+            
+        .buttonStyle { width: 30px; height: 30px; font-size: 12px !important; text-align: center !important; vertical-align: center;  }
+            
+        .transferToolL1 { width: 30%; vertical-align: top; text-align: center; padding-left: 15px; }
+        .transferToolButtons { width: 20%; vertical-align: center; text-align: center; padding-left: 20px; padding-right: 20px;}
+        .transferToolL2 { width: 30%; vertical-align: top; text-align: center; }
+        </style>
+        <!--/ Page .css styles -->
+        
+        <!-- Tab panel -->
+        <apex:tabPanel switchType="client" selectedTab="standartSObjectsRoot" id="OrgMetadataTabPanel" tabClass="rootTab" >
+            
+            <!-- Standart sObjects Root Panel -->
+            <apex:tab label="Standart sObjects Root" name="standartSObjectsRoot" id="standartRootTab" styleClass="standartSObjectsTab">
+                
+                <!-- Root panelGrig -->
+                <apex:panelGrid columns="2" columnClasses="column_one, column_two" >                
+                
+                    <!-- column 1 [ standart sObjects list ] -->
+                    <apex:selectList value="{! selectedStandartObject }" size="36" multiselect="false" id="standart_objects_list">
+                        <apex:selectOptions value="{! AllStandartObjects }" />
+                        <apex:actionSupport event="onchange" action="{! ClearStandartSelectedFields }"
+                                            reRender="standart_object_fields, standart_object_field_details, standart_objects_list_transferTool_initialList, standart_objects_list_transferTool_destinationList"/>
+                    </apex:selectList>
+                    <!--/ column 1 -->
+                    
+                    <!-- column 2 [ nested tabs ] -->
+                    <apex:tabPanel switchType="client" selectedTab="standartSObjectFieldsAndDescription" tabClass="nestedStandartTab">
+                        
+                        <!-- selected standart sObject field list & selected field details -->
+                        <apex:tab label="Standart sObjects Fields & Field Description" name="standartSObjectFieldsAndDescription" >
+                            
+                            <!-- Nested panelGrid -->
+                            <apex:panelGrid columns="2" columnClasses="column_one, column_two">
+                                
+                                <!-- column 1 [ selected standart sObject field list ] -->
+                                <apex:panelGroup id="standart_object_fields">
+                                    <apex:pageBlock rendered="{! NOT(isnull(selectedStandartObject)) }" mode="maindetail" >
+                                        <apex:panelGrid columns="1">                        
+                                            <apex:outputText styleClass="textLabelStandart" value="{! selectedStandartObject + ' fields'}" />
+                                            <apex:selectList value="{! selectedFieldsOfStandartObject }" size="30" multiselect="true" style="width: 250px;">
+                                                <apex:selectOptions value="{! StandartObjectFields }" />
+                                                <apex:actionSupport event="onchange" reRender="standart_object_field_details"/>
+                                            </apex:selectList>
+                                        </apex:panelGrid>
+                                    </apex:pageBlock>
+                                </apex:panelGroup>
+                                <!--/ column 1 -->
+                                
+                                <!-- column 2 [ selected standart sObject field details ] -->
+                                <apex:panelGroup id="standart_object_field_details" >
+                                    <apex:pageBlock rendered="{! NOT(isnull(selectedFieldsOfStandartObject)) }" mode="maindetail" >
+                                        <apex:panelGrid columns="1" >
+                                            <apex:outputText styleClass="textLabelStandart" value="{! selectedStandartObject + ' fields Details:' }" />
+                                            <apex:pageBlockTable value="{! StandartObjectFieldDetails }" var="field" rowClasses="pageBlockTableRowStyle"
+                                                                 headerClass="pageBlockTableColumnHeaderStyle" cellpadding="5" cellspacing="5">                                                
+                                                <apex:column headerValue="Label" value="{! field.Label }" />
+                                                <apex:column headerValue="Name" value="{! field.Name }" />
+                                                <apex:column headerValue="Type" value="{! field.Type }" />                               
+                                                <apex:column headerValue="isAccessible?" value="{! field.isAccessible }" />
+                                                <apex:column headerValue="isCreateable?" value="{! field.isCreateable }" />
+                                                <apex:column headerValue="isUpdateable?" value="{! field.isUpdateable }" />                            
+                                            </apex:pageBlockTable>
+                                        </apex:panelGrid>
+                                    </apex:pageBlock>
+                                </apex:panelGroup>
+                                <!--/ column 2 -->
+                                
+                            </apex:panelGrid>
+                            <!--/ Nested panelGrid -->
+                            
+                        </apex:tab>
+                        <!--/ selected standart sObject field list & selected field details -->
+                        
+                        <!-- FIELDS TRANSFER TOOL -->
+                        <apex:tab label="Standart sObject Fields Transfer Tool" name="standart_sObjects_fields_transfer_tool" >
+                            <apex:panelGrid columns="3" columnClasses="transferToolL1, transferToolButtons, transferToolL2" style="width: 800px;">
+                                
+                                <!-- Initial List -->
+                                <apex:panelGroup id="standart_objects_list_transferTool_initialList">
+                                    <apex:pageBlock mode="maindetail" >
+                                        <apex:panelGrid columns="1">                        
+                                            <apex:outputText styleClass="textLabelStandart" value="{! IF(NOT(isnull(selectedStandartObject)), selectedStandartObject, '<selected sObject>') + ' fields'}" />
+                                            <apex:selectList value="{! selectedStandartSObjectFields_TransferTool_Forward }" size="30" multiselect="true" style="width: 250px;" >
+                                                <apex:selectOptions value="{! StandartObjectFields_InitialList }" rendered="{! NOT(isnull(selectedStandartObject)) }" />                                                
+                                            </apex:selectList>
+                                        </apex:panelGrid>
+                                    </apex:pageBlock>
+                                </apex:panelGroup>
+                                <!--/ Initial List -->
+                                
+                                <!-- Transfer buttons block -->
+                                <apex:panelGroup >
+                                    <apex:commandButton value=">>" id="allFieldsForward_Standart" styleClass="buttonStyle" action="{! transferAllStandartFieldsForward }"
+                                                        reRender="standart_objects_list_transferTool_initialList, standart_objects_list_transferTool_destinationList"/><br/><br/>
+                                    <apex:commandButton value=">" id="oneFieldForward_Standart" styleClass="buttonStyle" action="{! transferSeveralStandartFieldsForward }"
+                                                        reRender="standart_objects_list_transferTool_initialList, standart_objects_list_transferTool_destinationList"/><br/><br/>
+                                    <apex:commandButton value="<" id="oneFieldBack_Standart" styleClass="buttonStyle" action="{! transferSeveralStandartFieldsBack }"
+                                                        reRender="standart_objects_list_transferTool_initialList, standart_objects_list_transferTool_destinationList"/><br/><br/>
+                                    <apex:commandButton value="<<" id="allFieldsBack_Standart" styleClass="buttonStyle" action="{! transferAllStandartFieldsBack }"
+                                                        reRender="standart_objects_list_transferTool_initialList, standart_objects_list_transferTool_destinationList"/>
+                                </apex:panelGroup>
+                                <!--/ Transfer buttons block -->
+                                
+                                <!-- Destination List -->
+                                <apex:panelGroup id="standart_objects_list_transferTool_destinationList">
+                                    <apex:pageBlock mode="maindetail" >
+                                        <apex:panelGrid columns="1">                        
+                                            <apex:outputText styleClass="textLabelStandart" value="Transfered fields" />
+                                            <apex:selectList value="{! selectedStandartSObjectFields_TransferTool_Back }" size="30" multiselect="true" style="width: 250px;">
+                                                <apex:selectOptions value="{! StandartObjectFields_DestinationList }" />
+                                            </apex:selectList>
+                                        </apex:panelGrid>
+                                    </apex:pageBlock>                                   
+                                </apex:panelGroup>
+                                <!--/ Destination List -->
+                                
+                            </apex:panelGrid>
+                        </apex:tab>
+                        <!--/ FIELDS TRANSFER TOOL -->
+                        
+                    </apex:tabPanel>
+                    <!--/ column 2 -->
+                    
+                </apex:panelGrid>
+                <!--/ Root panelGrig -->
+                
+            </apex:tab>
+            <!--/ Standart sObjects Root Panel -->
+            
+            <!-- Custom sObjects Root Panel -->
+            <apex:tab label="Custom sObjects Root" name="customSObjectsRoot" id="customRootTab" styleClass="customSObjectsTab">
+                
+                <!-- Root panelGrig -->
+                <apex:panelGrid columns="2" columnClasses="column_one, column_two">
+                    
+                    <!-- column 1 [ custom sObjects list ] -->
+                    <apex:selectList value="{! selectedCustomObject }" size="35" multiselect="false" id="custom_objects_list">
+                        <apex:selectOptions value="{! AllCustomObjects }" />
+                        <apex:actionSupport event="onchange" action="{! ClearCustomSelectedFields }"
+                                            reRender="custom_object_fields, custom_object_field_details, custom_objects_list_transferTool_initialList, custom_objects_list_transferTool_destinationList"/>
+                    </apex:selectList>
+                    <!--/ column 1 -->
+                    
+                    <!-- column 2 [ nested tabs ] -->
+                    <apex:tabPanel switchType="client" selectedTab="customSObjectFieldsAndDescription" tabClass="nestedCustomTab">
+                        
+                        <!-- selected custom sObject field list & selected field details -->
+                        <apex:tab label="Custom sObjects Fields & Field Description" name="customSObjectFieldsAndDescription" >
+                            
+                            <!-- Nested panelGrid -->
+                            <apex:panelGrid columns="2" columnClasses="column_one, column_two">
+                                
+                                <!-- column 1 [ selected custom sObject field list ] -->
+                                <apex:panelGroup id="custom_object_fields">
+                                    <apex:pageBlock rendered="{! NOT(isnull(selectedCustomObject)) }" mode="maindetail" >
+                                        <apex:panelGrid columns="1">                        
+                                            <apex:outputText styleClass="textLabelCustom" value="{! selectedCustomObject + ' fields'}" />
+                                            <apex:selectList value="{! selectedFieldsOfCustomObject }" size="30" multiselect="true" style="width: 250px;">
+                                                <apex:selectOptions value="{! CustomObjectFields }" />
+                                                <apex:actionSupport event="onchange" reRender="custom_object_field_details"/>
+                                            </apex:selectList>
+                                        </apex:panelGrid>
+                                    </apex:pageBlock>
+                                </apex:panelGroup>
+                                <!-- column 1  -->
+                                
+                                <!-- column 2 [ selected custom sObject field details ] -->
+                                <apex:panelGroup id="custom_object_field_details" >
+                                    <apex:pageBlock rendered="{! NOT(isnull(selectedFieldsOfCustomObject)) }" mode="maindetail" >
+                                        <apex:panelGrid columns="1" >
+                                            <apex:outputText styleClass="textLabelCustom" value="{! selectedCustomObject + ' fields Details:' }" />
+                                            <apex:pageBlockTable value="{! CustomObjectFieldDetails }" var="field" rowClasses="pageBlockTableRowStyle"
+                                                                 headerClass="pageBlockTableColumnHeaderStyle" cellpadding="5" cellspacing="5">                                                
+                                                <apex:column headerValue="Label" value="{! field.Label }" />
+                                                <apex:column headerValue="Name" value="{! field.Name }" />
+                                                <apex:column headerValue="Type" value="{! field.Type }" />                               
+                                                <apex:column headerValue="isAccessible?" value="{! field.isAccessible }" />
+                                                <apex:column headerValue="isCreateable?" value="{! field.isCreateable }" />
+                                                <apex:column headerValue="isUpdateable?" value="{! field.isUpdateable }" />                            
+                                            </apex:pageBlockTable>
+                                        </apex:panelGrid>
+                                    </apex:pageBlock>
+                                </apex:panelGroup>
+                                <!-- column 2  -->
+                                
+                            </apex:panelGrid>
+                            <!--/ Nested panelGrid -->
+                            
+                        </apex:tab>
+                        <!--/ selected custom sObject field list & selected field details -->
+                        
+                        <!-- FIELDS TRANSFER TOOL -->
+                        <apex:tab label="Custom sObjects Fields Transfer Tool" name="custom_sObjects_fields_transfer_tool" >
+                           <apex:panelGrid columns="3" columnClasses="transferToolL1, transferToolButtons, transferToolL2" style="width: 800px;">
+                                
+                                <!-- Initial List -->
+                                <apex:panelGroup id="custom_objects_list_transferTool_initialList">
+                                    <apex:pageBlock mode="maindetail" >
+                                        <apex:panelGrid columns="1">                        
+                                            <apex:outputText styleClass="textLabelStandart" value="{! IF(NOT(isnull(selectedCustomObject)), selectedCustomObject, '<selected sObject>') + ' fields'}" />
+                                            <apex:selectList value="{! selectedCustomSObjectFields_TransferTool_Forward }" size="30" multiselect="true" style="width: 250px;" >
+                                                <apex:selectOptions value="{! CustomObjectFields_InitialList }" rendered="{! NOT(isnull(selectedCustomObject)) }" />                                                
+                                            </apex:selectList>
+                                        </apex:panelGrid>
+                                    </apex:pageBlock>
+                                </apex:panelGroup>
+                                <!--/ Initial List -->
+                                
+                                <!-- Transfer buttons block -->
+                                <apex:panelGroup >
+                                    <apex:commandButton value=">>" id="allFieldsForward_Custom" styleClass="buttonStyle" action="{! transferAllCustomFieldsForward }"
+                                                        reRender="custom_objects_list_transferTool_initialList, custom_objects_list_transferTool_destinationList"/><br/><br/>
+                                    <apex:commandButton value=">" id="oneFieldForward_Custom" styleClass="buttonStyle" action="{! transferSeveralCustomFieldsForward }"
+                                                        reRender="custom_objects_list_transferTool_initialList, custom_objects_list_transferTool_destinationList"/><br/><br/>
+                                    <apex:commandButton value="<" id="oneFieldBack_Custom" styleClass="buttonStyle" action="{! transferSeveralCustomFieldsBack }"
+                                                        reRender="custom_objects_list_transferTool_initialList, custom_objects_list_transferTool_destinationList"/><br/><br/>
+                                    <apex:commandButton value="<<" id="allFieldsBack_Custom" styleClass="buttonStyle" action="{! transferAllCustomFieldsBack }"
+                                                        reRender="custom_objects_list_transferTool_initialList, custom_objects_list_transferTool_destinationList"/>
+                                </apex:panelGroup>
+                                <!--/ Transfer buttons block -->
+                                
+                                <!-- Destination List -->
+                                <apex:panelGroup id="custom_objects_list_transferTool_destinationList">
+                                    <apex:pageBlock mode="maindetail" >
+                                        <apex:panelGrid columns="1">                        
+                                            <apex:outputText styleClass="textLabelStandart" value="Transfered fields" />
+                                            <apex:selectList value="{! selectedCustomSObjectFields_TransferTool_Back }" size="30" multiselect="true" style="width: 250px;">
+                                                <apex:selectOptions value="{! CustomObjectFields_DestinationList }" />
+                                            </apex:selectList>
+                                        </apex:panelGrid>
+                                    </apex:pageBlock>                                   
+                                </apex:panelGroup>
+                                <!--/ Destination List -->
+                                
+                            </apex:panelGrid>
+                        </apex:tab>
+                        <!--/ FIELDS TRANSFER TOOL -->
+                        
+                    </apex:tabPanel>
+                    <!--/ column 2 -->
+                    
+                </apex:panelGrid>
+                <!--/ Root panelGrig -->
+                
+            </apex:tab>
+            <!--/ Custom sObjects Root Panel -->
+            
+        </apex:tabPanel>
+        <!--/ Tab panel -->
+        
+    </apex:form>
+</apex:page>

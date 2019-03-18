@@ -1,0 +1,10 @@
+<design:component label="sObjects List">
+  <design:attribute name="sObjectType" dataSource="Standard, Custom, Both" label="Select sObjects metadata type"/>
+  <design:attribute name="componentKey" label="Key to interact with 'sObject Fields And It's Description' or 'Transfer Tool'."
+                    description="When creating a new lightning page, three identical keys are created.
+                    One key for 'sObjectList' component, second key for 'sObject Fields And It's Description' component and third key for 'Transfer Tool' component.
+                    That ensures clear 'APPLICATION' type event routing if more then one identical lightning page with this three components exist.
+                    This attribute is required. You must specify key name.
+                    The default value is 'undefined' that means no one event will be handled."/>
+  <design:attribute name="label" label="Label" />
+</design:component>

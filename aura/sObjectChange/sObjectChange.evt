@@ -1,0 +1,2 @@
+<aura:event type="COMPONENT" description="Clear field description table when new sObject selected." access="public">
+</aura:event>

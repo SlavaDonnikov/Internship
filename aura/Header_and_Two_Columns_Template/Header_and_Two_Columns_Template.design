@@ -1,0 +1,7 @@
+<design:component label="Header and Two Columns Custom Template.">
+  <flexipage:template >
+    <flexipage:region name="header" defaultWidth="Large"/>
+    <flexipage:region name="leftColumn" defaultWidth="Small"/>
+    <flexipage:region name="rightColumn" defaultWidth="Medium"/>
+  </flexipage:template>
+</design:component>

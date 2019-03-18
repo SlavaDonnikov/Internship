@@ -1,0 +1,125 @@
+<apex:page controller="orgMetadataController">
+    <apex:form >
+        <apex:slds />
+        <apex:outputText style="font-weight: bold !important; color: black; font-size: 150%; text-align: center;" value="Retrieve org metadata." />
+        <apex:panelGrid columns="5" border="0" frame="none" cellpadding="1" cellspacing="1" columnClasses="one, two, three, four, five" >
+        
+            <apex:panelGroup id="standart_objects" >
+                <apex:pageBlock mode="detail"  >
+                    <apex:panelGrid columns="1">
+                        <apex:outputText styleClass="textLabelStandart" value="Standart objects" />
+                        <apex:selectList value="{! selectedStandartObject }" size="30" multiselect="false">
+                            <apex:selectOptions value="{! AllStandartObjects }" />
+                            <apex:actionSupport event="onchange" action="{! ClearStandartSelectedFields }" reRender="standart_object_fields, standart_object_field_details"/>
+                        </apex:selectList>
+                    </apex:panelGrid>
+                </apex:pageBlock>
+            </apex:panelGroup>
+            
+            <apex:panelGroup id="custom_objects">
+                <apex:pageBlock mode="detail" >
+                    <apex:panelGrid columns="1">
+                        <apex:outputText styleClass="textLabelCustom" value="Custom objects" />
+                        <apex:selectList value="{! selectedCustomObject }" size="30" multiselect="false">
+                            <apex:selectOptions value="{! AllCustomObjects }" />
+                            <apex:actionSupport event="onchange" action="{! ClearCustomSelectedFields }" reRender="custom_object_fields, custom_object_field_details"/>
+                        </apex:selectList>
+                    </apex:panelGrid>
+                </apex:pageBlock>
+            </apex:panelGroup>
+            
+            <apex:panelGroup id="standart_object_fields">
+                <apex:pageBlock rendered="{! NOT(isnull(selectedStandartObject)) }" mode="detail">
+                    <apex:panelGrid columns="1">                        
+                        <apex:outputText styleClass="textLabelStandart" value="{! selectedStandartObject + ' fields'}" />
+                        <apex:selectList value="{! selectedFieldsOfStandartObject }" multiselect="true" size="30"  >
+                            <apex:selectOptions value="{! StandartObjectFields }" />
+                            <apex:actionSupport event="onchange" reRender="standart_object_field_details"/>
+                        </apex:selectList>
+                    </apex:panelGrid>
+                </apex:pageBlock>
+            </apex:panelGroup>
+            
+            <apex:panelGroup id="custom_object_fields">
+                <apex:pageBlock rendered="{! NOT(isnull(selectedCustomObject)) }" mode="detail"> 
+                    <apex:panelGrid columns="1">
+                        <apex:outputText styleClass="textLabelCustom" value="{! selectedCustomObject + ' fields'}" />
+                        <apex:selectList value="{! selectedFieldsOfCustomObject }" multiselect="true" size="30">
+                            <apex:selectOptions value="{! CustomObjectFields }" />
+                            <apex:actionSupport event="onchange" reRender="custom_object_field_details"/>
+                        </apex:selectList>
+                    </apex:panelGrid>
+                </apex:pageBlock>
+            </apex:panelGroup>
+            
+            <apex:panelGroup >            
+                <apex:panelGroup id="standart_object_field_details" style="vertical-align:top">
+                    <apex:pageBlock rendered="{! NOT(isnull(selectedFieldsOfStandartObject)) }" mode="detail" >
+                        <apex:panelGrid columns="1" >
+                            <apex:outputText styleClass="textLabelStandart" value="{! selectedStandartObject + ' fields Details:' }" />
+                            <apex:pageBlockTable value="{! StandartObjectFieldDetails }" var="field">                                
+                                <apex:column headerValue="Label" value="{! field.Label }" />
+                                <apex:column headerValue="Name" value="{! field.Name }" />
+                                <apex:column headerValue="Type" value="{! field.Type }" />                               
+                                <apex:column headerValue="isAccessible?" value="{! field.isAccessible }" />
+                                <apex:column headerValue="isCreateable?" value="{! field.isCreateable }" />
+                                <apex:column headerValue="isUpdateable?" value="{! field.isUpdateable }" />                            
+                            </apex:pageBlockTable>
+                        </apex:panelGrid>
+                    </apex:pageBlock>
+                </apex:panelGroup><br/>
+            
+                <apex:panelGroup id="custom_object_field_details" style="vertical-align:top">
+                    <apex:pageBlock rendered="{! NOT(isnull(selectedFieldsOfCustomObject)) }" mode="detail" >
+                        <apex:panelGrid columns="1" >
+                            <apex:outputText styleClass="textLabelCustom" value="{! selectedCustomObject + ' fields Details:' }" />
+                            <apex:pageBlockTable value="{! CustomObjectFieldDetails }" var="field">                                
+                                <apex:column headerValue="Label" value="{! field.Label }" />
+                                <apex:column headerValue="Name" value="{! field.Name }" />
+                                <apex:column headerValue="Type" value="{! field.Type }" />                               
+                                <apex:column headerValue="isAccessible?" value="{! field.isAccessible }" />
+                                <apex:column headerValue="isCreateable?" value="{! field.isCreateable }" />
+                                <apex:column headerValue="isUpdateable?" value="{! field.isUpdateable }" />                            
+                            </apex:pageBlockTable>
+                        </apex:panelGrid>
+                    </apex:pageBlock>
+                </apex:panelGroup>
+            </apex:panelGroup>
+
+            <style type="text/CSS">
+            .one {
+                width: 15%;                
+            }
+            .two {
+                width: 15%;
+            }
+            .three {
+                width: 15%;
+            }
+            .four {
+                width: 15%;
+            }    
+            .five {
+                width: 40%;
+                vertical-align: top; 
+                text-align: center;
+            }             
+            .bPageBlock {
+                border-top: 4px solid #6B9EE2
+            }
+            .textLabelStandart {                
+                font-weight: bold !important;
+                color: #1BA261;                
+                font-size: 120%;
+            }
+            .textLabelCustom {                      
+                font-weight: bold !important;
+                color: #FF8080;                
+                font-size: 125%;
+            }
+            
+            </style>
+            
+        </apex:panelGrid>
+    </apex:form>
+</apex:page>

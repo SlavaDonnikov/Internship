@@ -1,0 +1,22 @@
+.THIS .slds-dueling-list {
+  display: block;
+}
+.THIS .slds-dueling-list__column_responsive .slds-dueling-list__options {
+  width: 21vw;
+  max-width: 50vw;
+}
+.THIS .slds-dueling-list__options {
+  height: 61.6vh;
+}
+.THIS .slds-dueling-list__column .slds-button {
+  padding-top: 0rem;
+}
+.THIS .slds-button_icon-container {
+  vertical-align: top;
+}
+.THIS .slds-form-element__help {
+  display: none;
+}
+.THIS .slds-text-title_caps {
+  margin-bottom: 1.2rem;
+}

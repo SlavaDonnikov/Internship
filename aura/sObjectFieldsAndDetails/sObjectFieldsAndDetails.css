@@ -1,0 +1,15 @@
+.THIS .col-width-15-vw {
+  width: 15vw;
+}
+.THIS .col-width-10-vw {
+  width: 10vw;
+}
+.THIS .col-width-6-vw {
+  width: 6vw;
+}
+.THIS .col-width-5-vw {
+  width: 5vw;
+}
+.THIS tr>th:first-child {
+  padding-left: 0.5rem;
+}

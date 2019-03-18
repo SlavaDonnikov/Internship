@@ -1,0 +1,557 @@
+<apex:page controller="orgMetadataTabSldsActFunctController" standardStylesheets="false" lightningStyleSheets="true" showHeader="false" sidebar="false" applyHtmlTag="false" applyBodyTag="false" docType="html-5.0">
+  <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" lang="en">
+    <head>
+      <meta charset="utf-8" />
+      <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+      <title>{! $Label.Html_head_title }</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1"/>
+      <link href="{!URLFOR($Resource.JSandCSS, 'JSandCSS/styles/appCSS.css')}" rel="stylesheet" type="text/css"/>
+      <script src="{!URLFOR($Resource.JSandCSS, 'JSandCSS/scripts/appJS.js')}" type="text/javascript"></script>
+      <apex:slds />
+    </head>
+    <body>
+      <!-- REQUIRED SLDS WRAPPER -->
+      <div class="slds-scope">
+        <!-- HEADING -->
+        <p class="slds-text-heading_label slds-m-top_xx-small slds-m-left_large slds-m-bottom_small"> {! $Label.Page_head } </p>
+        <!--/ HEADING -->
+        <!-- PRIMARY CONTENT WRAPPER -->
+        <div class="slds-p-horizontal_medium">
+          <!-- ROOT TABS -->
+          <div class="slds-tabs_default">
+            <ul class="slds-tabs_default__nav" role="tablist">
+              <li class="slds-m-right_xxx-small slds-tabs_default__item slds-is-active" title="Standard sObject Root" role="presentation" id="tab-root-standard">
+                <a class="slds-tabs_default__link" href="javascript:void(0);" onclick="switchRootTabs(event);return false;" role="tab" tabindex="0" connector="tab1"
+                   aria-selected="true" aria-controls="tab-root-standard-content" id="tab-root-standard-a">{! $Label.Standard_root_tab }</a>
+              </li>
+              <li class="slds-tabs_default__item" title="Custom sObject Root" role="presentation" id="tab-root-custom">
+                <a class="slds-tabs_default__link" href="javascript:void(0);" onclick="switchRootTabs(event);return false;" role="tab" tabindex="-1" connector="tab2"
+                   aria-selected="false" aria-controls="tab-root-custom-content" id="tab-root-custom-a">{! $Label.Custom_root_tab }</a>
+              </li>
+            </ul>
+            <!-- ROOT TAB STANDARD SOBJECTS ARIA-CONTROLS -->
+            <div id="tab-root-standard-content" connector="tab1" class="slds-tabs_default__content slds-show" role="tabpanel" aria-labelledby="tab-root-standard-a">
+              <!-- STANDARD sOBJECTS GRID -->
+              <div class="slds-grid slds-gutters">
+                <!-- GRID COLUMN 1 -->
+                <div class="slds-col slds-size_1-of-4">
+                  <!-- ALL ORG STANDARD SOBJECT LIST -->
+                  <div class="slds-m-top_small" >
+                    <div class="slds-align_absolute-center">
+                      <label class="slds-form-element__label">{! $Label.Standard_SObjects }</label>
+                    </div>
+                    <div id="mainStandardSObjectList" class="slds-scrollable_y select-list_sObjects--style" tabindex="0">
+                      <table role="grid" class="slds-table slds-table_fixed-layout slds-table_cell-buffer slds-no-row-hover">
+                        <tbody>
+                        <apex:form >
+                          <apex:actionFunction name="showStandardSObjectFieldListAF" action="{! processStandardSObjectFields }"
+                                               reRender="standard_object_fields, standard_object_field_details, standard_objects_list_transferTool_initialList, standard_objects_list_transferTool_destinationList">
+                            <apex:param name="sObjectName" id="sObjectNameParam" value="" assignTo="{! selectedStandardSObject }"/>
+                          </apex:actionFunction>
+                        </apex:form>
+                        <apex:repeat value="{! AllStandardSObjects }" var="sObject">
+                          <tr >
+                            <th scope="row">
+                              <div class="slds-truncate" onclick="markSelectedItem(event); showStandardSObjectFieldListJS('{!sObject}');">{! sObject }</div>
+                            </th>
+                          </tr>
+                        </apex:repeat>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <!--/ ALL ORG STANDARD SOBJECT LIST -->
+                </div>
+                <!--/ GRID COLUMN 1 -->
+                <!-- GRID COLUMN 2 -->
+                <div class="slds-col slds-size_3-of-4 slds-m-left_x-large">
+                  <!-- NESTED TABS _ STANDARD sOBJECTS FIELDS, FIELD DESCRIPTION, TRANSFER TOOL -->
+                  <div class="slds-tabs_default">
+                    <ul class="slds-tabs_default__nav" role="tablist">
+                      <li class="slds-m-right_xxx-small slds-tabs_default__item slds-is-active" title="Item One" role="presentation" id="tab-nested-standard-fields-and-description">
+                        <a class="slds-tabs_default__link" href="javascript:void(0);" onclick="switchRootTabs(event);return false;" role="tab" tabindex="0" connector="tab1"
+                           aria-selected="true" aria-controls="tab-nested-standard-fields-details" id="tab-nested-standard-fields-details-a">{! $Label.Standard_fields_fieldsInfo }</a>
+                      </li>
+                      <li class="slds-tabs_default__item" title="Item Two" role="presentation" id="tab-nested-standard-transfer-tool">
+                        <a class="slds-tabs_default__link" href="javascript:void(0);" onclick="switchRootTabs(event);return false;" role="tab" tabindex="-1" connector="tab2"
+                           aria-selected="false" aria-controls="tab-nested-standard-transfer-tool" id="tab-nested-standard-transfer-tool-a">{! $Label.Standard_transfer_tool }</a>
+                      </li>
+                    </ul>
+                    <!-- NESTED TAB _ STANDARD SOBJECTS FIELDS & FIELDS DESCRIPTION _ ARIA-CONTROLS -->
+                    <div id="tab-nested-standard-fields-details" connector="tab1" class="slds-tabs_default__content slds-show" role="tabpanel" aria-labelledby="tab-nested-standard-fields-details-a">
+                      <!-- NESTED GRID - STANDARD SOBJECTS FIELDS AND FIELD DESCRIPTION -->
+                      <div class="slds-grid slds-gutters">
+                        <!-- NESTED GRID COLUMN 1 -->
+                        <div class="slds-col slds-size_1-of-4 slds-m-top_small">
+                          <!-- SELECTED STANDARD SOBJECT FIELDS LIST -->
+                          <apex:form id="standard_object_fields">
+                            <div >
+                              <div class="slds-align_absolute-center">
+                                <label class="slds-form-element__label">{! IF(NOT(isnull(selectedStandardSObject)), selectedStandardSObject, $Label.Dynamic_Selected_sObject) + ' ' + $Label.Dynamic_fields}</label>
+                              </div>
+                              <div id="mainStandardSObjectFieldsList" class="slds-scrollable_y select-list_sObjectFields--style" tabindex="0">
+                                <table role="grid" class="slds-table slds-table_fixed-layout slds-table_cell-buffer slds-no-row-hover">
+                                  <tbody>
+                                  <apex:actionFunction name="standardSObjectSelectedFieldInfoAF" action="{! processStandardSObjectFieldDetails }" reRender="standard_object_field_details">
+                                    <apex:param name="sObjectFieldName" value="" assignTo="{! selectedOneFieldOfStandardSObject }"/>
+                                  </apex:actionFunction>
+                                  <apex:repeat value="{! StandardSObjectFields }" var="field" rendered="{! NOT(isnull(selectedStandardSObject)) }">
+                                    <tr>
+                                      <th scope="row" >
+                                        <div class="slds-truncate" onclick="markAllSelectedItems(event); standardSObjectSelectedFieldInfoJS('{!field}');" >{! field }</div>
+                                      </th>
+                                    </tr>
+                                  </apex:repeat>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                          </apex:form>
+                          <!--/ SELECTED STANDARD SOBJECT FIELDS LIST -->
+                        </div>
+                        <!--/ NESTED GRID COLUMN 1 -->
+                        <!-- NESTED GRID COLUMN 2 -->
+                        <div class="slds-col slds-size_2-of-4 slds-m-left_medium slds-m-top_x-large">
+                          <!-- SELECTED STANDARD SOBJECT FIELDS DESCRIPTION -->
+                          <apex:panelGroup id="standard_object_field_details">
+                            <apex:outputPanel rendered="{! NOT(isnull(selectedFieldsOfStandardSObject)) }">
+                              <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                                <thead>
+                                <tr class="slds-text-title_caps">
+                                  <th scope="col">
+                                    <div class="slds-truncate" title="Field Label">{! $Label.Label }</div>
+                                  </th>
+                                  <th scope="col">
+                                    <div class="slds-truncate" title="Field Name">{! $Label.Name }</div>
+                                  </th>
+                                  <th scope="col">
+                                    <div class="slds-truncate" title="Field Type">{! $Label.Type }</div>
+                                  </th>
+                                  <th scope="col">
+                                    <div class="slds-truncate slds-align_absolute-center" title="Is Field Accessible ?">{! $Label.isAccessible }</div>
+                                  </th>
+                                  <th scope="col">
+                                    <div class="slds-truncate slds-align_absolute-center" title="Is Field Createable ?">{! $Label.isCreateable }</div>
+                                  </th>
+                                  <th scope="col">
+                                    <div class="slds-truncate slds-align_absolute-center" title="Is Field Updateable ?">{! $Label.isUpdateable }</div>
+                                  </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <apex:repeat value="{! StandardSObjectFieldDetails }" var="field">
+                                  <tr>
+                                    <th scope="row" data-label="Label">
+                                      <div class="slds-truncate">{! field.label }</div>
+                                    </th>
+                                    <td data-label="Name">
+                                      <div class="slds-truncate">{! field.name }</div>
+                                    </td>
+                                    <td data-label="Type">
+                                      <div class="slds-truncate">{! field.type }</div>
+                                    </td>
+                                    <td data-label="isAccessible?">
+                                      <div class="slds-truncate slds-align_absolute-center">{! field.isAccessible }</div>
+                                    </td>
+                                    <td data-label="isCreateable?">
+                                      <div class="slds-truncate slds-align_absolute-center">{! field.isCreateable }</div>
+                                    </td>
+                                    <td data-label="isUpdateable?">
+                                      <div class="slds-truncate slds-align_absolute-center">{! field.isUpdateable }</div>
+                                    </td>
+                                  </tr>
+                                </apex:repeat>
+                                </tbody>
+                              </table>
+                            </apex:outputPanel>
+                          </apex:panelGroup>
+                          <!--/ SELECTED STANDARD SOBJECT FIELDS DESCRIPTION -->
+                        </div>
+                        <!--/ NESTED GRID COLUMN 2 -->
+                      </div>
+                      <!--/ NESTED GRID - STANDARD SOBJECTS FIELDS AND FIELD DESCRIPTION -->
+                    </div>
+                    <!--/ NESTED TAB _ STANDARD SOBJECTS FIELDS & FIELDS DESCRIPTION _ ARIA-CONTROLS -->
+                    <!-- NESTED TAB _ STANDARD SOBJECTS _ TRANSFER TOOL _ ARIA-CONTROLS -->
+                    <div id="tab-nested-standard-transfer-tool" connector="tab2" class="slds-tabs_default__content slds-hide" role="tabpanel" aria-labelledby="tab-nested-standard-transfer-tool-a">
+                      <!-- NESTED GRID - STANDARD SOBJECT FIELDS TRANSFER TOOL -->
+                      <div class="slds-grid slds-gutters slds-m-top_small">
+                        <!-- SLDS COLUMN 1 _ TRANSFER TOOL -->
+                        <div class="slds-col slds-size_6-of-8">
+                          <!-- SLDS DUELING PICKLIST -->
+                          <div class="slds-form-element" role="group" aria-labelledby="picklist-group-label">
+                            <div class="slds-dueling-list">
+                              <!-- STANDARD TRANSFER TOOL INITIAL LIST -->
+                              <apex:form id="standard_objects_list_transferTool_initialList">
+                                <div class="slds-dueling-list__column">
+                                  <span id="label-01" class="slds-form-element__label slds-align_absolute-center" >{! $Label.Dynamic_available + ' ' + IF(NOT(isnull(selectedStandardSObject)), selectedStandardSObject, $Label.Dynamic_Selected_sObject) + ' ' + $Label.Dynamic_fields }</span>
+                                  <div class="slds-dueling-list__options">
+                                    <ul id="standardTransferToolInitialList" aria-describedby="option-drag-label" aria-labelledby="label-01" aria-multiselectable="true" class="slds-listbox slds-listbox_vertical" role="listbox">
+                                      <apex:repeat value="{! StandardSObjectFieldsToInitialList }" var="field" rendered="{! NOT(isnull(selectedStandardSObject)) }">
+                                        <li role="presentation" class="slds-listbox__item">
+                                          <div class="slds-listbox__option slds-listbox__option_plain slds-media slds-media_small slds-media_inline slds-is-selected" aria-selected="false" draggable="true" role="option" tabindex="-1">
+                                              <span class="slds-media__body">
+                                                <span class="slds-truncate" onclick="markAllSelectedItemsDuelingPicklist(event);" title="{!field}">{!field}</span>
+                                              </span>
+                                          </div>
+                                        </li>
+                                      </apex:repeat>
+                                    </ul>
+                                  </div>
+                                </div>
+                              </apex:form>
+                              <!--/ STANDARD TRANSFER TOOL INITIAL LIST -->
+                              <!-- STANDARD TRANSFER TOOL BUTTONS -->
+                              <apex:form >
+                                <!-- apex:actionFunction area -->
+                                <apex:actionFunction name="transferAllStandardFieldsForwardAF" action="{! transferAllStandardFieldsForward }"
+                                                     reRender="standard_objects_list_transferTool_initialList, standard_objects_list_transferTool_destinationList"/>
+                                <apex:actionFunction name="transferAllStandardFieldsBackAF" action="{! transferAllStandardFieldsBack }"
+                                                     reRender="standard_objects_list_transferTool_initialList, standard_objects_list_transferTool_destinationList"/>
+
+                                <apex:actionFunction name="transferSeveralStandardFieldsForwardAF" action="{! transferSeveralStandardFieldsForward }"
+                                                     reRender="standard_objects_list_transferTool_initialList, standard_objects_list_transferTool_destinationList">
+                                  <apex:param name="selectedStandardFieldsTransferToolForward" value="" assignTo="{! selectedStandardSObjectFieldsCSVLikeForward }"/>
+                                </apex:actionFunction>
+                                <apex:actionFunction name="transferSeveralStandardFieldsBackAF" action="{! transferSeveralStandardFieldsBack }"
+                                                     reRender="standard_objects_list_transferTool_initialList, standard_objects_list_transferTool_destinationList">
+                                  <apex:param name="selectedStandardFieldsTransferToolBack" value="" assignTo="{! selectedStandardSObjectFieldsCSVLikeBack }"/>
+                                </apex:actionFunction>
+                                <!--/ apex:actionFunction area -->
+                                <div class="slds-dueling-list__column dueling-picklist-buttons-margin-center">
+                                  <button id="standardAllForward" class="slds-button slds-button_icon slds-button_icon-container" onclick="transferAllFieldsJS(event);return false;">
+                                    <svg class="slds-button__icon" aria-hidden="true">
+                                      <use xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#right"></use>
+                                    </svg>
+                                    <span class="slds-assistive-text">{! $Label.Move_all_fields_to_selected_list }</span>
+                                  </button>
+                                  <button id="standardSeveralForward" class="slds-button slds-button_icon slds-button_icon-container" onclick="transferSeveralFieldsJS(event);return false;">
+                                    <svg class="slds-button__icon" aria-hidden="true">
+                                      <use xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#chevronright"></use>
+                                    </svg>
+                                    <span class="slds-assistive-text">{! $Label.Move_several_fields_to_selected_list }</span>
+                                  </button>
+                                  <button id="standardSeveralBack" class="slds-button slds-button_icon slds-button_icon-container" onclick="transferSeveralFieldsJS(event);return false;">
+                                    <svg class="slds-button__icon" aria-hidden="true">
+                                      <use xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#chevronleft"></use>
+                                    </svg>
+                                    <span class="slds-assistive-text">{! $Label.Move_several_fields_to_available_list }</span>
+                                  </button>
+                                  <button id="standardAllBack" class="slds-button slds-button_icon slds-button_icon-container" onclick="transferAllFieldsJS(event);return false;">
+                                    <svg class="slds-button__icon" aria-hidden="true">
+                                      <use xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#left"></use>
+                                    </svg>
+                                    <span class="slds-assistive-text">{! $Label.Move_all_fields_to_available_list }</span>
+                                  </button>
+                                </div>
+                              </apex:form>
+                              <!--/ STANDARD TRANSFER TOOL BUTTONS -->
+                              <!-- STANDARD TRANSFER TOOL DESTINATION LIST -->
+                              <apex:form id="standard_objects_list_transferTool_destinationList">
+                                <div class="slds-dueling-list__column">
+                                  <span id="label-02" class="slds-form-element__label slds-align_absolute-center">{! $Label.Dynamic_selected + ' ' + IF(NOT(isnull(selectedStandardSObject)), selectedStandardSObject, $Label.Dynamic_Selected_sObject) + ' ' + $Label.Dynamic_fields }</span>
+                                  <div class="slds-dueling-list__options">
+                                    <ul id="standardTransferToolDestinationList" aria-describedby="option-drag-label" aria-labelledby="label-02" aria-multiselectable="true" class="slds-listbox slds-listbox_vertical" role="listbox">
+                                      <apex:repeat value="{! StandardSObjectFieldsToDestinationList }" var="field">
+                                        <li role="presentation" class="slds-listbox__item">
+                                          <div class="slds-listbox__option slds-listbox__option_plain slds-media slds-media_small slds-media_inline slds-is-selected" aria-selected="false" draggable="true" role="option" tabindex="-1">
+                                              <span class="slds-media__body">
+                                                <span class="slds-truncate" onclick="markAllSelectedItemsDuelingPicklist(event);" title="{!field}">{!field}</span>
+                                              </span>
+                                          </div>
+                                        </li>
+                                      </apex:repeat>
+                                    </ul>
+                                  </div>
+                                </div>
+                              </apex:form>
+                              <!--/ STANDARD TRANSFER TOOL DESTINATION LIST -->
+                            </div>
+                          </div>
+                          <!--/ SLDS DUELING PICKLIST  -->
+                        </div>
+                        <!--/ SLDS COLUMN 1 TRANSFER TOOL -->
+                      </div>
+                      <!--/ NESTED GRID - STANDARD SOBJECT FIELDS TRANSFER TOOL -->
+                    </div>
+                    <!--/ NESTED TAB _ STANDARD SOBJECTS _ TRANSFER TOOL _ ARIA-CONTROLS -->
+                  </div>
+                  <!--/ NESTED TABS _ STANDARD sOBJECTS FIELDS, FIELD DESCRIPTION, TRANSFER TOOL -->
+                </div>
+                <!--/ GRID COLUMN 2 -->
+              </div>
+              <!--/ STANDARD sOBJECTS GRID -->
+            </div>
+            <!--/ ROOT TAB STANDARD SOBJECTS ARIA-CONTROLS -->
+            <!-- ROOT TAB CUSTOM SOBJECTS ARIA-CONTROLS -->
+            <div id="tab-root-custom-content" connector="tab2" class="slds-tabs_default__content slds-hide" role="tabpanel" aria-labelledby="tab-root-custom-a">
+              <!-- CUSTOM sOBJECTS GRID -->
+              <div class="slds-grid slds-gutters">
+                <!-- GRID COLUMN 1 -->
+                <div class="slds-col slds-size_1-of-4">
+                  <!-- ALL ORG CUSTOM SOBJECT LIST -->
+                  <div class="slds-m-top_small">
+                    <div class="slds-align_absolute-center">
+                      <label class="slds-form-element__label">{! $Label.Custom_SObjects }</label>
+                    </div>
+                    <div id="mainCustomSObjectList" class="slds-scrollable_y select-list_sObjects--style" tabindex="0">
+                      <table role="grid" class="slds-table slds-table_fixed-layout slds-table_cell-buffer slds-no-row-hover">
+                        <tbody>
+                        <apex:form >
+                          <apex:actionFunction name="showCustomSObjectFieldListAF" action="{! processCustomSObjectFields }"
+                                               reRender="custom_object_fields, custom_object_field_details, custom_objects_list_transferTool_initialList, custom_objects_list_transferTool_destinationList">
+                            <apex:param name="sObjectName" id="sObjectNameParam" value="" assignTo="{! selectedCustomSObject }"/>
+                          </apex:actionFunction>
+                        </apex:form>
+                        <apex:repeat value="{! AllCustomSObjects }" var="sObject">
+                          <tr>
+                            <th scope="row">
+                              <div class="slds-truncate" onclick="markSelectedItem(event); showCustomSObjectFieldListJS('{!sObject}');">{! sObject }</div>
+                            </th>
+                          </tr>
+                        </apex:repeat>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <!--/ ALL ORG CUSTOM SOBJECT LIST -->
+                </div>
+                <!--/ GRID COLUMN 1 -->
+                <!-- GRID COLUMN 2 -->
+                <div class="slds-col slds-size_3-of-4 slds-m-left_x-large">
+                  <!-- NESTED TABS _ CUSTOM sOBJECTS FIELDS, FIELD DESCRIPTION, TRANSFER TOOL -->
+                  <div class="slds-tabs_default">
+                    <ul class="slds-tabs_default__nav" role="tablist">
+                      <li class="slds-m-right_xxx-small slds-tabs_default__item slds-is-active" title="Item One" role="presentation" id="tab-nested-custom-fields-and-description">
+                        <a class="slds-tabs_default__link" href="javascript:void(0);" onclick="switchRootTabs(event);return false;" role="tab" tabindex="0" connector="tab1"
+                           aria-selected="true" aria-controls="tab-nested-custom-fields-details" id="tab-nested-custom-fields-details-a">{! $Label.Custom_fields_fieldsInfo }</a>
+                      </li>
+                      <li class="slds-tabs_default__item" title="Item Two" role="presentation" id="tab-nested-custom-transfer-tool">
+                        <a class="slds-tabs_default__link" href="javascript:void(0);" onclick="switchRootTabs(event);return false;" role="tab" tabindex="-1" connector="tab2"
+                           aria-selected="false" aria-controls="tab-nested-custom-transfer-tool" id="tab-nested-custom-transfer-tool-a">{! $Label.Custom_transfer_tool }</a>
+                      </li>
+                    </ul>
+                    <!-- NESTED TAB _ CUSTOM SOBJECTS FIELDS & FIELDS DESCRIPTION _ ARIA-CONTROLS -->
+                    <div id="tab-nested-custom-fields-details" connector="tab1" class="slds-tabs_default__content slds-show" role="tabpanel" aria-labelledby="tab-nested-custom-fields-details-a">
+                      <!-- NESTED GRID - CUSTOM SOBJECTS FIELDS AND FIELD DESCRIPTION -->
+                      <div class="slds-grid slds-gutters">
+                        <!-- NESTED GRID COLUMN 1 -->
+                        <div class="slds-col slds-size_1-of-4 slds-m-top_small">
+                          <!-- SELECTED CUSTOM SOBJECT FIELDS LIST -->
+                          <apex:form id="custom_object_fields">
+                            <div>
+                              <div class="slds-align_absolute-center">
+                                <label class="slds-form-element__label">{! IF(NOT(isnull(selectedCustomSObject)), selectedCustomSObject, $Label.Dynamic_Selected_sObject) + ' ' + $Label.Dynamic_fields }</label>
+                              </div>
+                              <div id="mainCustomSObjectFieldsList" class="slds-scrollable_y select-list_sObjectFields--style" tabindex="0">
+                                <table role="grid" class="slds-table slds-table_fixed-layout slds-table_cell-buffer slds-no-row-hover">
+                                  <tbody>
+                                  <apex:actionFunction name="customSObjectSelectedFieldInfoAF" action="{! processCustomSObjectFieldDetails }" reRender="custom_object_field_details">
+                                    <apex:param name="sObjectFieldName" value="" assignTo="{! selectedOneFieldOfCustomSObject }"/>
+                                  </apex:actionFunction>
+                                  <apex:repeat value="{! CustomSObjectFields }" var="field" rendered="{! NOT(isnull(selectedCustomSObject)) }">
+                                    <tr>
+                                      <th scope="row">
+                                        <div class="slds-truncate" onclick="markAllSelectedItems(event); customSObjectSelectedFieldInfoJS('{!field}');" >{! field }</div>
+                                      </th>
+                                    </tr>
+                                  </apex:repeat>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                          </apex:form>
+                          <!--/ SELECTED CUSTOM SOBJECT FIELDS LIST -->
+                        </div>
+                        <!--/ NESTED GRID COLUMN 1 -->
+                        <!-- NESTED GRID COLUMN 2 -->
+                        <div class="slds-col slds-size_2-of-4 slds-m-left_medium slds-m-top_x-large">
+                          <!-- SELECTED CUSTOM SOBJECT FIELDS DESCRIPTION -->
+                          <apex:panelGroup id="custom_object_field_details">
+                            <apex:outputPanel rendered="{! NOT(isnull(selectedFieldsOfCustomSObject)) }">
+                              <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                                <thead>
+                                <tr class="slds-text-title_caps">
+                                  <th scope="col">
+                                    <div class="slds-truncate" title="Field Label">{! $Label.Label }</div>
+                                  </th>
+                                  <th scope="col">
+                                    <div class="slds-truncate" title="Field Name">{! $Label.Name }</div>
+                                  </th>
+                                  <th scope="col">
+                                    <div class="slds-truncate" title="Field Type">{! $Label.Type }</div>
+                                  </th>
+                                  <th scope="col">
+                                    <div class="slds-truncate slds-align_absolute-center" title="Is Field Accessible ?">{! $Label.isAccessible }</div>
+                                  </th>
+                                  <th scope="col">
+                                    <div class="slds-truncate slds-align_absolute-center" title="Is Field Createable ?">{! $Label.isCreateable }</div>
+                                  </th>
+                                  <th scope="col">
+                                    <div class="slds-truncate slds-align_absolute-center" title="Is Field Updateable ?">{! $Label.isUpdateable }</div>
+                                  </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <apex:repeat value="{! CustomSObjectFieldDetails }" var="field">
+                                  <tr>
+                                    <th scope="row" data-label="Label">
+                                      <div class="slds-truncate">{! field.label }</div>
+                                    </th>
+                                    <td data-label="Name">
+                                      <div class="slds-truncate">{! field.name }</div>
+                                    </td>
+                                    <td data-label="Type">
+                                      <div class="slds-truncate">{! field.type }</div>
+                                    </td>
+                                    <td data-label="isAccessible?">
+                                      <div class="slds-truncate slds-align_absolute-center">{! field.isAccessible }</div>
+                                    </td>
+                                    <td data-label="isCreateable?">
+                                      <div class="slds-truncate slds-align_absolute-center">{! field.isCreateable }</div>
+                                    </td>
+                                    <td data-label="isUpdateable?">
+                                      <div class="slds-truncate slds-align_absolute-center">{! field.isUpdateable }</div>
+                                    </td>
+                                  </tr>
+                                </apex:repeat>
+                                </tbody>
+                              </table>
+                            </apex:outputPanel>
+                          </apex:panelGroup>
+                          <!--/ SELECTED CUSTOM SOBJECT FIELDS DESCRIPTION -->
+                        </div>
+                        <!--/ NESTED GRID COLUMN 2 -->
+                      </div>
+                      <!--/ NESTED GRID - CUSTOM SOBJECTS FIELDS AND FIELD DESCRIPTION -->
+                    </div>
+                    <!--/ NESTED TAB _ CUSTOM SOBJECTS FIELDS & FIELDS DESCRIPTION _ ARIA-CONTROLS -->
+                    <!-- NESTED TAB _ CUSTOM SOBJECTS _ TRANSFER TOOL _ ARIA-CONTROLS -->
+                    <div id="tab-nested-custom-transfer-tool" connector="tab2" class="slds-tabs_default__content slds-hide" role="tabpanel" aria-labelledby="tab-nested-custom-transfer-tool-a">
+                      <!-- NESTED GRID - CUSTOM SOBJECT FIELDS TRANSFER TOOL -->
+                      <div class="slds-grid slds-gutters slds-m-top_small">
+                        <!-- COLUMN 1 TRANSFER TOOL-->
+                        <div class="slds-col slds-size_6-of-8">
+                          <div class="slds-form-element" role="group" aria-labelledby="picklist-group-label">
+                            <div class="slds-dueling-list">
+                              <!-- CUSTOM TRANSFER TOOL INITIAL LIST -->
+                              <apex:form id="custom_objects_list_transferTool_initialList">
+                                <div class="slds-dueling-list__column">
+                                  <span id="label-01" class="slds-form-element__label slds-align_absolute-center">{! $Label.Dynamic_available + ' ' + IF(NOT(isnull(selectedCustomSObject)), selectedCustomSObject, $Label.Dynamic_Selected_sObject) + ' ' + $Label.Dynamic_fields }</span>
+                                  <div class="slds-dueling-list__options">
+                                    <ul id="customTransferToolInitialList" aria-describedby="option-drag-label" aria-labelledby="label-01" aria-multiselectable="true" class="slds-listbox slds-listbox_vertical" role="listbox">
+                                      <apex:repeat value="{! CustomSObjectFieldsToInitialList }" var="field" rendered="{! NOT(isnull(selectedCustomSObject)) }">
+                                        <li role="presentation" class="slds-listbox__item">
+                                          <div class="slds-listbox__option slds-listbox__option_plain slds-media slds-media_small slds-media_inline slds-is-selected" aria-selected="false" draggable="true" role="option" tabindex="-1">
+                                              <span class="slds-media__body">
+                                                <span class="slds-truncate" onclick="markAllSelectedItemsDuelingPicklist(event);" title="{!field}">{!field}</span>
+                                              </span>
+                                          </div>
+                                        </li>
+                                      </apex:repeat>
+                                    </ul>
+                                  </div>
+                                </div>
+                              </apex:form>
+                              <!--/ CUSTOM TRANSFER TOOL INITIAL LIST -->
+                              <!-- CUSTOM TRANSFER TOOL BUTTONS -->
+                              <apex:form >
+                                <!--/ apex:actionFunction area -->
+                                <apex:actionFunction name="transferAllCustomFieldsForwardAF" action="{! transferAllCustomFieldsForward }"
+                                                     reRender="custom_objects_list_transferTool_initialList, custom_objects_list_transferTool_destinationList"/>
+                                <apex:actionFunction name="transferAllCustomFieldsBackAF" action="{! transferAllCustomFieldsBack }"
+                                                     reRender="custom_objects_list_transferTool_initialList, custom_objects_list_transferTool_destinationList"/>
+
+                                <apex:actionFunction name="transferSeveralCustomFieldsForwardAF" action="{! transferSeveralCustomFieldsForward }"
+                                                     reRender="custom_objects_list_transferTool_initialList, custom_objects_list_transferTool_destinationList">
+                                  <apex:param name="selectedCustomFieldsTransferToolForward" value="" assignTo="{! selectedCustomSObjectFieldsCSVLikeForward }"/>
+                                </apex:actionFunction>
+                                <apex:actionFunction name="transferSeveralCustomFieldsBackAF" action="{! transferSeveralCustomFieldsBack }"
+                                                     reRender="custom_objects_list_transferTool_initialList, custom_objects_list_transferTool_destinationList">
+                                  <apex:param name="selectedCustomFieldsTransferToolBack" value="" assignTo="{! selectedCustomSObjectFieldsCSVLikeBack }"/>
+                                </apex:actionFunction>
+                                <!--/ apex:actionFunction area -->
+                                <div class="slds-dueling-list__column dueling-picklist-buttons-margin-center">
+                                  <button id="customAllForward" class="slds-button slds-button_icon slds-button_icon-container" onclick="transferAllFieldsJS(event);return false;">
+                                    <svg class="slds-button__icon" aria-hidden="true">
+                                      <use xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#right"></use>
+                                    </svg>
+                                    <span class="slds-assistive-text">{! $Label.Move_all_fields_to_selected_list }</span>
+                                  </button>
+                                  <button id="customSeveralForward" class="slds-button slds-button_icon slds-button_icon-container" onclick="transferSeveralFieldsJS(event);return false;">
+                                    <svg class="slds-button__icon" aria-hidden="true">
+                                      <use xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#chevronright"></use>
+                                    </svg>
+                                    <span class="slds-assistive-text">{! $Label.Move_several_fields_to_selected_list }</span>
+                                  </button>
+                                  <button id="customSeveralBack" class="slds-button slds-button_icon slds-button_icon-container" onclick="transferSeveralFieldsJS(event);return false;">
+                                    <svg class="slds-button__icon" aria-hidden="true">
+                                      <use xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#chevronleft"></use>
+                                    </svg>
+                                    <span class="slds-assistive-text">{! $Label.Move_several_fields_to_available_list }</span>
+                                  </button>
+                                  <button id="customAllBack" class="slds-button slds-button_icon slds-button_icon-container" onclick="transferAllFieldsJS(event);return false;">
+                                    <svg class="slds-button__icon" aria-hidden="true">
+                                      <use xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#left"></use>
+                                    </svg>
+                                    <span class="slds-assistive-text">{! $Label.Move_all_fields_to_available_list }</span>
+                                  </button>
+                                </div>
+                              </apex:form>
+                              <!--/ CUSTOM TRANSFER TOOL BUTTONS -->
+                              <!-- CUSTOM TRANSFER TOOL DESTINATION LIST -->
+                              <apex:form id="custom_objects_list_transferTool_destinationList">
+                                <div class="slds-dueling-list__column">
+                                  <span id="label-02" class="slds-form-element__label slds-align_absolute-center">{! $Label.Dynamic_selected + ' ' + IF(NOT(isnull(selectedCustomSObject)), selectedCustomSObject, $Label.Dynamic_Selected_sObject) + ' ' + $Label.Dynamic_fields }</span>
+                                  <div class="slds-dueling-list__options">
+                                    <ul id="customTransferToolDestinationList" aria-describedby="option-drag-label" aria-labelledby="label-02" aria-multiselectable="true" class="slds-listbox slds-listbox_vertical" role="listbox">
+                                      <apex:repeat value="{! CustomSObjectFieldsToDestinationList }" var="field">
+                                        <li role="presentation" class="slds-listbox__item">
+                                          <div class="slds-listbox__option slds-listbox__option_plain slds-media slds-media_small slds-media_inline slds-is-selected" aria-selected="false" draggable="true" role="option" tabindex="-1">
+                                              <span class="slds-media__body">
+                                                <span class="slds-truncate" onclick="markAllSelectedItemsDuelingPicklist(event);" title="{!field}">{!field}</span>
+                                              </span>
+                                          </div>
+                                        </li>
+                                      </apex:repeat>
+                                    </ul>
+                                  </div>
+                                </div>
+                              </apex:form>
+                              <!-- CUSTOM TRANSFER TOOL DESTINATION LIST -->
+                            </div>
+                          </div>
+                          <!--/ SLDS DUELING PICKLIST -->
+                        </div>
+                        <!--/ COLUMN 1 TRANSFER TOOL-->
+                      </div>
+                      <!--/ NESTED GRID - CUSTOM SOBJECT FIELDS TRANSFER TOOL -->
+                    </div>
+                    <!--/ NESTED TAB _ CUSTOM SOBJECTS _ TRANSFER TOOL _ ARIA-CONTROLS -->
+                  </div>
+                  <!--/ NESTED TABS _ CUSTOM sOBJECTS FIELDS, FIELD DESCRIPTION, TRANSFER TOOL -->
+                </div>
+                <!--/ GRID COLUMN 2 -->
+              </div>
+              <!--/ CUSTOM sOBJECTS GRID -->
+            </div>
+            <!--/ ROOT TAB CUSTOM SOBJECTS ARIA-CONTROLS -->
+          </div>
+          <!--/ ROOT TABS -->
+        </div>
+        <!--/ PRIMARY CONTENT WRAPPER -->
+        <!-- FOOTER -->
+        <footer role="contentinfo" class="slds-p-around_large">
+          <!-- LAYOUT GRID -->
+          <div class="slds-grid slds-grid_align-spread">
+            <p class="slds-col">{! $Label.Footer_SLDS_in_VF }</p>
+            <p class="slds-col">{! $Label.Creator }</p>
+          </div>
+          <!--/ LAYOUT GRID -->
+        </footer>
+        <!--/ FOOTER -->
+      </div>
+      <!--/ REQUIRED SLDS WRAPPER -->
+    </body>
+  </html>
+</apex:page>

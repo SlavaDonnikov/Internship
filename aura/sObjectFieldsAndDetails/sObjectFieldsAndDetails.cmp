@@ -1,0 +1,74 @@
+<aura:component controller="MetadataProcessingController" implements="flexipage:availableForAllPageTypes" access="public" description="List for displaying fields of the selected sObject, and table for displaying every field description.">
+  <aura:attribute name="componentKey" type="String" default="undefined" required="true" description="See description in the corresponding aura:design file."/>
+  <aura:attribute name="label" type="String" default="Please enter the label" required="true" description="User-selectable label above the list (for nested c:sObjectFieldList)."/>
+  <aura:attribute name="tableLabel" type="String" default="Please enter the label" required="true" description="User-selectable label above the table with a description of the selected field."/>
+
+  <aura:attribute name="fields" type="WrapperClasses.FieldDetails[]"/>
+
+  <!-- Component event handler -->
+  <aura:handler name="sendSelectedField" event="c:sendFieldEvent" action="{! c.showFieldInfo }"/>
+  <aura:handler name="sObjectChange" event="c:sObjectChange" action="{! c.onSObjectChange }"/>
+
+  <lightning:layout multipleRows="false" horizontalAlign="space">
+    <lightning:layoutItem flexibility="grow" size="3" largeDeviceSize="3" mediumDeviceSize="1.5">
+      <c:sObjectFieldList label="{! v.label }" componentKey="{! v.componentKey }"/>
+    </lightning:layoutItem>
+    <lightning:layoutItem class="slds-m-left_medium" flexibility="grow" size="9" largeDeviceSize="9" mediumDeviceSize="4.5">
+      <!-- TABLE -->
+      <div class="slds-scope">
+        <div class="slds-align_absolute-center slds-m-bottom_xx-small">
+          <label class="slds-form-element__label">{! v.tableLabel }</label>
+        </div>
+        <table class="slds-table slds-table_fixed-layout slds-table_bordered slds-no-row-hover ">
+          <thead>
+          <tr class="slds-text-title_caps">
+            <th scope="col" class="col-width-15-vw">
+              <div class="slds-truncate" title="Field Label">{! $Label.c.Label }</div>
+            </th>
+            <th scope="col" class="col-width-10-vw">
+              <div class="slds-truncate" title="Field Name">{! $Label.c.Name }</div>
+            </th>
+            <th scope="col" class="col-width-5-vw">
+              <div class="slds-truncate" title="Field Type">{! $Label.c.Type }</div>
+            </th>
+            <th scope="col" class="col-width-6-vw">
+              <div class="slds-truncate slds-align_absolute-center" title="Is Field Accessible ?">{! $Label.c.isAccessible }</div>
+            </th>
+            <th scope="col" class="col-width-6-vw">
+              <div class="slds-truncate slds-align_absolute-center" title="Is Field Createable ?">{! $Label.c.isCreateable }</div>
+            </th>
+            <th scope="col" class="col-width-6-vw">
+              <div class="slds-truncate slds-align_absolute-center" title="Is Field Updateable ?">{! $Label.c.isUpdateable }</div>
+            </th>
+          </tr>
+          </thead>
+          <tbody>
+          <aura:iteration items="{! v.fields }" var="field">
+            <tr>
+              <th scope="row" data-label="Label">
+                <div class="slds-truncate">{! field.label }</div>
+              </th>
+              <td data-label="Name">
+                <div class="slds-truncate">{! field.name }</div>
+              </td>
+              <td data-label="Type">
+                <div class="slds-truncate">{! field.type }</div>
+              </td>
+              <td data-label="isAccessible?">
+                <div class="slds-truncate slds-align_absolute-center">{! field.isAccessible }</div>
+              </td>
+              <td data-label="isCreateable?">
+                <div class="slds-truncate slds-align_absolute-center">{! field.isCreateable }</div>
+              </td>
+              <td data-label="isUpdateable?">
+                <div class="slds-truncate slds-align_absolute-center">{! field.isUpdateable }</div>
+              </td>
+            </tr>
+          </aura:iteration>
+          </tbody>
+        </table>
+      </div>
+      <!--/ TABLE -->
+    </lightning:layoutItem>
+  </lightning:layout>
+</aura:component>

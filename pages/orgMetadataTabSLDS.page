@@ -1,0 +1,529 @@
+<apex:page controller="orgMetadataTabSldsController" showHeader="false" standardStylesheets="false" sidebar="false" applyHtmlTag="false" applyBodyTag="false" docType="html-5.0">
+  <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>Salesforce Lightning Design System Trailhead Module</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Import the Design System style sheet -->
+    <apex:slds />
+  </head>
+  <body>
+  <!-- REQUIRED SLDS WRAPPER -->
+  <div class="slds-scope">
+
+    <!-- MASTHEAD -->
+    <p class="slds-text-heading_label slds-m-bottom_small"> Metadata processing </p>
+    <!-- / MASTHEAD -->
+
+    <!-- PRIMARY CONTENT WRAPPER -->
+    <apex:form >
+      <div class="myapp slds-p-horizontal_medium">
+        <!-- ROOT TABS -->
+        <div class="slds-tabs_default">
+          <ul class="slds-tabs_default__nav" role="tablist">
+            <li class="slds-m-right_xxx-small slds-tabs_default__item slds-is-active" title="Standard sObject Root" role="presentation" id="tab-root-standard">
+              <a class="slds-tabs_default__link" href="javascript:void(0);" onclick="switchRootTabs(event);return false;" role="tab" tabindex="0" connector="tab1" aria-selected="true" aria-controls="tab-root-standard-content" id="tab-root-standard-a">Standard sObjects Root Tab</a>
+            </li>
+            <li class="slds-tabs_default__item" title="Custom sObject Root" role="presentation" id="tab-root-custom">
+              <a class="slds-tabs_default__link" href="javascript:void(0);" onclick="switchRootTabs(event);return false;" role="tab" tabindex="-1" connector="tab2" aria-selected="false" aria-controls="tab-root-custom-content" id="tab-root-custom-a">Custom sObjects Root Tab</a>
+            </li>
+          </ul>
+          <!-- ROOT TAB STANDARD SOBJECTS ARIA-CONTROLS -->
+          <div id="tab-root-standard-content" connector="tab1" class="slds-tabs_default__content slds-show" role="tabpanel" aria-labelledby="tab-root-standard-a">
+            <!-- STANDARD sOBJECTS GRID -->
+            <div class="slds-grid slds-gutters">
+              <!-- GRID COLUMN 1 -->
+              <div class="slds-col slds-size_1-of-4">
+                <!-- ALL ORG STANDARD SOBJECT LIST -->
+                <div class="slds-form-element">
+                  <div class="slds-align_absolute-center">
+                    <label class="slds-form-element__label">Org Standard sObjects</label>
+                  </div>
+                  <div class="slds-form-element__control">
+                    <div class="slds-select_container">
+                      <apex:selectList value="{! selectedStandardSObject }" size="20" multiselect="false" id="standard_objects_list" styleClass="slds-select">
+                        <apex:selectOptions value="{! AllStandardSObjects }" />
+                        <apex:actionSupport event="onchange" action="{! ClearStandardSelectedFields }"
+                                            reRender="standard_object_fields, standard_object_field_details, standard_objects_list_transferTool_initialList, standard_objects_list_transferTool_destinationList"/>
+                      </apex:selectList>
+                    </div>
+                  </div>
+                </div>
+                <!--/ ALL ORG STANDARD SOBJECT LIST -->
+              </div>
+              <!--/ GRID COLUMN 1 -->
+              <!-- GRID COLUMN 2 -->
+              <div class="slds-col slds-size_3-of-4 slds-m-left_x-large">
+                <!-- NESTED TABS _ STANDARD sOBJECTS FIELDS, FIELD DESCRIPTION, TRANSFER TOOL -->
+                <div class="slds-tabs_default">
+                  <ul class="slds-tabs_default__nav" role="tablist">
+                    <li class="slds-m-right_xxx-small slds-tabs_default__item slds-is-active" title="Item One" role="presentation" id="tab-nested-standard-fields-and-description">
+                      <a class="slds-tabs_default__link" href="javascript:void(0);" onclick="switchRootTabs(event);return false;" role="tab" tabindex="0" connector="tab1" aria-selected="true" aria-controls="tab-nested-standard-fields-details" id="tab-nested-standard-fields-details-a">Standard sObject Fields And Fields Description</a>
+                    </li>
+                    <li class="slds-tabs_default__item" title="Item Two" role="presentation" id="tab-nested-standard-transfer-tool">
+                      <a class="slds-tabs_default__link" href="javascript:void(0);" onclick="switchRootTabs(event);return false;" role="tab" tabindex="-1" connector="tab2" aria-selected="false" aria-controls="tab-nested-standard-transfer-tool" id="tab-nested-standard-transfer-tool-a">Standard sObject Fields Transfer Tool</a>
+                    </li>
+                  </ul>
+                  <!-- NESTED TAB _ STANDARD SOBJECTS FIELDS & FIELDS DESCRIPTION _ ARIA-CONTROLS -->
+                  <div id="tab-nested-standard-fields-details" connector="tab1" class="slds-tabs_default__content slds-show" role="tabpanel" aria-labelledby="tab-nested-standard-fields-details-a">
+                    <!-- NESTED GRID - STANDARD SOBJECTS FIELDS AND FIELD DESCRIPTION -->
+                    <div class="slds-grid slds-gutters">
+                      <!-- NESTED GRID COLUMN 1 -->
+                      <div class="slds-col slds-size_1-of-4 slds-m-top_small">
+                        <!-- SELECTED STANDARD SOBJECT FIELDS LIST -->
+                        <apex:panelGroup id="standard_object_fields">
+                          <apex:outputPanel rendered="{! NOT(isnull(selectedStandardSObject)) }" >
+                            <div class="slds-form-element">
+                              <div class="slds-align_absolute-center">
+                                <label class="slds-form-element__label">'{! selectedStandardSObject}' sObject fields</label>
+                              </div>
+                              <div class="slds-form-element__control">
+                                <div class="slds-select_container">
+                                  <apex:selectList value="{! selectedFieldsOfStandardSObject }" size="18" multiselect="true" styleClass="slds-select" >
+                                    <apex:selectOptions value="{! StandardSObjectFields }" />
+                                    <apex:actionSupport event="onchange" reRender="standard_object_field_details"/>
+                                  </apex:selectList>
+                                </div>
+                              </div>
+                            </div>
+                          </apex:outputPanel>
+                        </apex:panelGroup>
+                        <!--/ SELECTED STANDARD SOBJECT FIELDS LIST -->
+                      </div>
+                      <!--/ NESTED GRID COLUMN 1 -->
+                      <!-- NESTED GRID COLUMN 2 -->
+                      <div class="slds-col slds-size_2-of-4 slds-m-top_x-large">
+                        <apex:panelGroup id="standard_object_field_details">
+                          <apex:outputPanel rendered="{! NOT(isnull(selectedFieldsOfStandardSObject)) }">
+                            <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                              <thead>
+                              <tr class="slds-text-title_caps">
+                                <th scope="col">
+                                  <div class="slds-truncate" title="Field Label">Label</div>
+                                </th>
+                                <th scope="col">
+                                  <div class="slds-truncate" title="Field Name">Name</div>
+                                </th>
+                                <th scope="col">
+                                  <div class="slds-truncate" title="Field Type">Type</div>
+                                </th>
+                                <th scope="col">
+                                  <div class="slds-truncate slds-align_absolute-center" title="Is Field Accessible ?">isAccessible?</div>
+                                </th>
+                                <th scope="col">
+                                  <div class="slds-truncate slds-align_absolute-center" title="Is Field Createable ?">isCreateable?</div>
+                                </th>
+                                <th scope="col">
+                                  <div class="slds-truncate slds-align_absolute-center" title="Is Field Updateable ?">isUpdateable?</div>
+                                </th>
+                              </tr>
+                              </thead>
+                              <tbody>
+                              <apex:repeat value="{! StandardSObjectFieldDetails }" var="field">
+                                <tr>
+                                  <th scope="row" data-label="Label">
+                                    <div class="slds-truncate" >{! field.label }</div>
+                                  </th>
+                                  <td data-label="Name">
+                                    <div class="slds-truncate" >{! field.name }</div>
+                                  </td>
+                                  <td data-label="Type">
+                                    <div class="slds-truncate" >{! field.type }</div>
+                                  </td>
+                                  <td data-label="isAccessible?">
+                                    <div class="slds-truncate slds-align_absolute-center" >{! field.isAccessible }</div>
+                                  </td>
+                                  <td data-label="isCreateable?">
+                                    <div class="slds-truncate slds-align_absolute-center" >{! field.isCreateable }</div>
+                                  </td>
+                                  <td data-label="isUpdateable?">
+                                    <div class="slds-truncate slds-align_absolute-center" >{! field.isUpdateable }</div>
+                                  </td>
+                                </tr>
+                              </apex:repeat>
+                              </tbody>
+                            </table>
+                          </apex:outputPanel>
+                        </apex:panelGroup>
+                      </div>
+                      <!--/ NESTED GRID COLUMN 2 -->
+                    </div>
+                    <!--/ NESTED GRID - STANDARD SOBJECTS FIELDS AND FIELD DESCRIPTION -->
+                  </div>
+                  <!--/ NESTED TAB _ STANDARD SOBJECTS FIELDS & FIELDS DESCRIPTION _ ARIA-CONTROLS -->
+                  <!-- NESTED TAB _ STANDARD SOBJECTS _ TRANSFER TOOL _ ARIA-CONTROLS -->
+                  <div id="tab-nested-standard-transfer-tool" connector="tab2" class="slds-tabs_default__content slds-hide" role="tabpanel" aria-labelledby="tab-nested-standard-transfer-tool-a">
+                    <!-- NESTED GRID - STANDARD SOBJECT FIELDS TRANSFER TOOL -->
+                    <div class="slds-grid slds-gutters slds-m-top_small">
+                      <!-- COLUMN 1 -->
+                      <div class="slds-col slds-size_2-of-8">
+                        <!-- TRANSFER TOOL _ INITIAL LIST -->
+                        <apex:panelGroup id="standard_objects_list_transferTool_initialList">
+                          <apex:outputPanel >
+                            <div class="slds-form-element">
+                              <div class="slds-align_absolute-center">
+                                <label class="slds-form-element__label">{! IF(NOT(isnull(selectedStandardSObject)), "'" + selectedStandardSObject + "'", '<selected sObject>') + ' fields.'} List 1</label>
+                              </div>
+                              <div class="slds-form-element__control">
+                                <div class="slds-select_container">
+                                  <apex:selectList value="{! selectedStandardSObjectFieldsTransferToolForward }" size="18" multiselect="true" styleClass="slds-select selected-list-height--style" >
+                                    <apex:selectOptions value="{! StandardSObjectFieldsToInitialList }" rendered="{! NOT(isnull(selectedStandardSObject)) }" />
+                                  </apex:selectList>
+                                </div>
+                              </div>
+                            </div>
+                          </apex:outputPanel>
+                        </apex:panelGroup>
+                        <!--/ TRANSFER TOOL _ INITIAL LIST -->
+                      </div>
+                      <!--/ COLUMN 1 -->
+                      <!-- COLUMN 2 -->
+                      <div class="slds-col slds-size_1-of-8">
+                        <!-- VERTICAL GRID WITH BUTTONS -->
+                        <div class="slds-grid slds-m-top_xx-large slds-grid_vertical slds-grid_vertical-align-center x">
+                          <div class="slds-col custom-top-margin--style">
+                            <div class="slds-col slds-m-top_medium">
+                              <apex:commandButton value=">>" action="{! transferAllStandardFieldsForward }" styleClass="slds-button slds-button--brand slds-align_absolute-center transfer-tool-button--style"
+                                                  reRender="standard_objects_list_transferTool_initialList, standard_objects_list_transferTool_destinationList"/>
+                            </div>
+                          </div>
+                          <div class="slds-col slds-m-top_medium">
+                            <div class="slds-col slds-m-top_medium">
+                              <apex:commandButton value=">" action="{! transferSeveralStandardFieldsForward }" styleClass="slds-button slds-button--brand slds-align_absolute-center transfer-tool-button--style"
+                                                  reRender="standard_objects_list_transferTool_initialList, standard_objects_list_transferTool_destinationList"/>
+                            </div>
+                          </div>
+                          <div class="slds-col slds-m-top_medium">
+                            <div class="slds-col slds-m-top_medium">
+                              <apex:commandButton value="<" action="{! transferSeveralStandardFieldsBack }" styleClass="slds-button slds-button--brand slds-align_absolute-center transfer-tool-button--style"
+                                                  reRender="standard_objects_list_transferTool_initialList, standard_objects_list_transferTool_destinationList"/>
+                            </div>
+                          </div>
+                          <div class="slds-col slds-m-top_medium">
+                            <div class="slds-col slds-m-top_medium">
+                              <apex:commandButton value="<<" action="{! transferAllStandardFieldsBack }" styleClass="slds-button slds-button--brand slds-align_absolute-center transfer-tool-button--style"
+                                                  reRender="standard_objects_list_transferTool_initialList, standard_objects_list_transferTool_destinationList"/>
+                            </div>
+                          </div>
+                        </div>
+                        <!--/ VERTICAL GRID WITH BUTTONS -->
+                      </div>
+                      <!--/ COLUMN 2 -->
+                      <!-- COLUMN 3 -->
+                      <div class="slds-col slds-size_2-of-8">
+                        <apex:panelGroup id="standard_objects_list_transferTool_destinationList">
+                          <apex:outputPanel >
+                            <div class="slds-form-element">
+                              <div class="slds-align_absolute-center">
+                                <label class="slds-form-element__label">Transferred fields</label>
+                              </div>
+                              <div class="slds-form-element__control">
+                                <div class="slds-select_container">
+                                  <apex:selectList value="{! selectedStandardSObjectFieldsTransferToolBack }" size="18" multiselect="true" styleClass="slds-select selected-list-height--style" >
+                                    <apex:selectOptions value="{! StandardSObjectFieldsToDestinationList }" />
+                                  </apex:selectList>
+                                </div>
+                              </div>
+                            </div>
+                          </apex:outputPanel>
+                        </apex:panelGroup>
+                      </div>
+                      <!--/ COLUMN 3 -->
+                    </div>
+                    <!--/ NESTED GRID - STANDARD SOBJECT FIELDS TRANSFER TOOL -->
+                  </div>
+                  <!--/ NESTED TAB _ STANDARD SOBJECTS _ TRANSFER TOOL _ ARIA-CONTROLS -->
+                </div>
+                <!--/ NESTED TABS _ STANDARD sOBJECTS FIELDS, FIELD DESCRIPTION, TRANSFER TOOL -->
+              </div>
+              <!--/ GRID COLUMN 2 -->
+            </div>
+            <!--/ STANDARD sOBJECTS GRID -->
+          </div>
+          <!--/ ROOT TAB STANDARD SOBJECTS ARIA-CONTROLS -->
+          <!-- ROOT TAB CUSTOM SOBJECTS ARIA-CONTROLS -->
+          <div id="tab-root-custom-content" connector="tab2" class="slds-tabs_default__content slds-hide" role="tabpanel" aria-labelledby="tab-root-custom-a">
+            <!-- CUSTOM sOBJECTS GRID -->
+            <div class="slds-grid slds-gutters">
+              <!-- GRID COLUMN 1 -->
+              <div class="slds-col slds-size_1-of-4">
+                <!-- ALL ORG CUSTOM SOBJECT LIST -->
+                <div class="slds-form-element">
+                  <div class="slds-align_absolute-center">
+                    <label class="slds-form-element__label">Org Custom sObjects</label>
+                  </div>
+                  <div class="slds-form-element__control">
+                    <div class="slds-select_container">
+                      <apex:selectList value="{! selectedCustomSObject }" size="20" multiselect="false" id="custom_objects_list" styleClass="slds-select">
+                        <apex:selectOptions value="{! AllCustomSObjects }" />
+                        <apex:actionSupport event="onchange" action="{! ClearCustomSelectedFields }"
+                                            reRender="custom_object_fields, custom_object_field_details, custom_objects_list_transferTool_initialList, custom_objects_list_transferTool_destinationList"/>
+                      </apex:selectList>
+                    </div>
+                  </div>
+                </div>
+                <!--/ ALL ORG CUSTOM SOBJECT LIST -->
+              </div>
+              <!--/ GRID COLUMN 1 -->
+              <!-- GRID COLUMN 2 -->
+              <div class="slds-col slds-size_3-of-4 slds-m-left_x-large">
+                <!-- NESTED TABS _ CUSTOM sOBJECTS FIELDS, FIELD DESCRIPTION, TRANSFER TOOL -->
+                <div class="slds-tabs_default">
+                  <ul class="slds-tabs_default__nav" role="tablist">
+                    <li class="slds-m-right_xxx-small slds-tabs_default__item slds-is-active" title="Item One" role="presentation" id="tab-nested-custom-fields-and-description">
+                      <a class="slds-tabs_default__link" href="javascript:void(0);" onclick="switchRootTabs(event);return false;" role="tab" tabindex="0" connector="tab1" aria-selected="true" aria-controls="tab-nested-custom-fields-details" id="tab-nested-custom-fields-details-a">Custom sObject Fields And Fields Description</a>
+                    </li>
+                    <li class="slds-tabs_default__item" title="Item Two" role="presentation" id="tab-nested-custom-transfer-tool">
+                      <a class="slds-tabs_default__link" href="javascript:void(0);" onclick="switchRootTabs(event);return false;" role="tab" tabindex="-1" connector="tab2" aria-selected="false" aria-controls="tab-nested-custom-transfer-tool" id="tab-nested-custom-transfer-tool-a">Custom sObject Fields Transfer Tool</a>
+                    </li>
+                  </ul>
+                  <!-- NESTED TAB _ CUSTOM SOBJECTS FIELDS & FIELDS DESCRIPTION _ ARIA-CONTROLS -->
+                  <div id="tab-nested-custom-fields-details" connector="tab1" class="slds-tabs_default__content slds-show" role="tabpanel" aria-labelledby="tab-nested-custom-fields-details-a">
+                    <!-- NESTED GRID - CUSTOM SOBJECTS FIELDS AND FIELD DESCRIPTION -->
+                    <div class="slds-grid slds-gutters">
+                      <!-- NESTED GRID COLUMN 1 -->
+                      <div class="slds-col slds-size_1-of-4 slds-m-top_small">
+                        <!-- SELECTED CUSTOM SOBJECT FIELDS LIST -->
+                        <apex:panelGroup id="custom_object_fields">
+                          <apex:outputPanel rendered="{! NOT(isnull(selectedCustomSObject)) }" >
+                            <div class="slds-form-element">
+                              <div class="slds-align_absolute-center">
+                                <label class="slds-form-element__label">'{! selectedCustomSObject}' sObject fields</label>
+                              </div>
+                              <div class="slds-form-element__control">
+                                <div class="slds-select_container">
+                                  <apex:selectList value="{! selectedFieldsOfCustomSObject }" size="18" multiselect="true" styleClass="slds-select" >
+                                    <apex:selectOptions value="{! CustomSObjectFields }" />
+                                    <apex:actionSupport event="onchange" reRender="custom_object_field_details"/>
+                                  </apex:selectList>
+                                </div>
+                              </div>
+                            </div>
+                          </apex:outputPanel>
+                        </apex:panelGroup>
+                        <!--/ SELECTED CUSTOM SOBJECT FIELDS LIST -->
+                      </div>
+                      <!--/ NESTED GRID COLUMN 1 -->
+                      <!-- NESTED GRID COLUMN 2 -->
+                      <div class="slds-col slds-size_2-of-4 slds-m-top_x-large">
+                        <apex:panelGroup id="custom_object_field_details">
+                          <apex:outputPanel rendered="{! NOT(isnull(selectedFieldsOfCustomSObject)) }">
+                            <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                              <thead>
+                              <tr class="slds-text-title_caps">
+                                <th scope="col">
+                                  <div class="slds-truncate" title="Field Label">Label</div>
+                                </th>
+                                <th scope="col">
+                                  <div class="slds-truncate" title="Field Name">Name</div>
+                                </th>
+                                <th scope="col">
+                                  <div class="slds-truncate" title="Field Type">Type</div>
+                                </th>
+                                <th scope="col">
+                                  <div class="slds-truncate slds-align_absolute-center" title="Is Field Accessible ?">isAccessible?</div>
+                                </th>
+                                <th scope="col">
+                                  <div class="slds-truncate slds-align_absolute-center" title="Is Field Createable ?">isCreateable?</div>
+                                </th>
+                                <th scope="col">
+                                  <div class="slds-truncate slds-align_absolute-center" title="Is Field Updateable ?">isUpdateable?</div>
+                                </th>
+                              </tr>
+                              </thead>
+                              <tbody>
+                              <apex:repeat value="{! CustomSObjectFieldDetails }" var="field">
+                                <tr>
+                                  <th scope="row" data-label="Label">
+                                    <div class="slds-truncate" >{! field.label }</div>
+                                  </th>
+                                  <td data-label="Name">
+                                    <div class="slds-truncate" >{! field.name }</div>
+                                  </td>
+                                  <td data-label="Type">
+                                    <div class="slds-truncate" >{! field.type }</div>
+                                  </td>
+                                  <td data-label="isAccessible?">
+                                    <div class="slds-truncate slds-align_absolute-center" >{! field.isAccessible }</div>
+                                  </td>
+                                  <td data-label="isCreateable?">
+                                    <div class="slds-truncate slds-align_absolute-center" >{! field.isCreateable }</div>
+                                  </td>
+                                  <td data-label="isUpdateable?">
+                                    <div class="slds-truncate slds-align_absolute-center" >{! field.isUpdateable }</div>
+                                  </td>
+                                </tr>
+                              </apex:repeat>
+                              </tbody>
+                            </table>
+                          </apex:outputPanel>
+                        </apex:panelGroup>
+                      </div>
+                      <!--/ NESTED GRID COLUMN 2 -->
+                    </div>
+                    <!--/ NESTED GRID - CUSTOM SOBJECTS FIELDS AND FIELD DESCRIPTION -->
+                  </div>
+                  <!--/ NESTED TAB _ CUSTOM SOBJECTS FIELDS & FIELDS DESCRIPTION _ ARIA-CONTROLS -->
+                  <!-- NESTED TAB _ CUSTOM SOBJECTS _ TRANSFER TOOL _ ARIA-CONTROLS -->
+                  <div id="tab-nested-custom-transfer-tool" connector="tab2" class="slds-tabs_default__content slds-hide" role="tabpanel" aria-labelledby="tab-nested-custom-transfer-tool-a">
+                    <!-- NESTED GRID - CUSTOM SOBJECT FIELDS TRANSFER TOOL -->
+                    <div class="slds-grid slds-gutters slds-m-top_small">
+                      <!-- COLUMN 1 -->
+                      <div class="slds-col slds-size_2-of-8">
+                        <!-- TRANSFER TOOL _ INITIAL LIST -->
+                        <apex:panelGroup id="custom_objects_list_transferTool_initialList">
+                          <apex:outputPanel >
+                            <div class="slds-form-element">
+                              <div class="slds-align_absolute-center">
+                                <label class="slds-form-element__label">{! IF(NOT(isnull(selectedCustomSObject)), "'" + selectedCustomSObject + "'", '<selected sObject>') + ' fields.'} List 1</label>
+                              </div>
+                              <div class="slds-form-element__control">
+                                <div class="slds-select_container">
+                                  <apex:selectList value="{! selectedCustomSObjectFieldsTransferToolForward }" size="18" multiselect="true" styleClass="slds-select selected-list-height--style" >
+                                    <apex:selectOptions value="{! CustomSObjectFieldsToInitialList }" rendered="{! NOT(isnull(selectedCustomSObject)) }" />
+                                  </apex:selectList>
+                                </div>
+                              </div>
+                            </div>
+                          </apex:outputPanel>
+                        </apex:panelGroup>
+                        <!--/ TRANSFER TOOL _ INITIAL LIST -->
+                      </div>
+                      <!--/ COLUMN 1 -->
+                      <!-- COLUMN 2 BUTTONS -->
+                      <div class="slds-col slds-size_1-of-8">
+                        <!-- VERTICAL GRID WITH BUTTONS -->
+                        <div class="slds-grid slds-m-top_xx-large slds-grid_vertical slds-grid_vertical-align-center x">
+                          <div class="slds-col custom-top-margin--style">
+                            <div class="slds-col slds-m-top_medium">
+                              <apex:commandButton value=">>" action="{! transferAllCustomFieldsForward }" styleClass="slds-button slds-button--brand slds-align_absolute-center transfer-tool-button--style"
+                                                  reRender="custom_objects_list_transferTool_initialList, custom_objects_list_transferTool_destinationList"/>
+                            </div>
+                          </div>
+                          <div class="slds-col slds-m-top_medium">
+                            <div class="slds-col slds-m-top_medium">
+                              <apex:commandButton value=">" action="{! transferSeveralCustomFieldsForward }" styleClass="slds-button slds-button--brand slds-align_absolute-center transfer-tool-button--style"
+                                                  reRender="custom_objects_list_transferTool_initialList, custom_objects_list_transferTool_destinationList"/>
+                            </div>
+                          </div>
+                          <div class="slds-col slds-m-top_medium">
+                            <div class="slds-col slds-m-top_medium">
+                              <apex:commandButton value="<" action="{! transferSeveralCustomFieldsBack }" styleClass="slds-button slds-button--brand slds-align_absolute-center transfer-tool-button--style"
+                                                  reRender="custom_objects_list_transferTool_initialList, custom_objects_list_transferTool_destinationList"/>
+                            </div>
+                          </div>
+                          <div class="slds-col slds-m-top_medium">
+                            <div class="slds-col slds-m-top_medium">
+                              <apex:commandButton value="<<" action="{! transferAllCustomFieldsBack }" styleClass="slds-button slds-button--brand slds-align_absolute-center transfer-tool-button--style"
+                                                  reRender="custom_objects_list_transferTool_initialList, custom_objects_list_transferTool_destinationList"/>
+                            </div>
+                          </div>
+                        </div>
+                        <!--/ VERTICAL GRID WITH BUTTONS -->
+                      </div>
+                      <!--/ COLUMN 2 BUTTONS -->
+                      <!-- COLUMN 3 -->
+                      <div class="slds-col slds-size_2-of-8">
+                        <apex:panelGroup id="custom_objects_list_transferTool_destinationList">
+                          <apex:outputPanel >
+                            <div class="slds-form-element">
+                              <div class="slds-align_absolute-center">
+                                <label class="slds-form-element__label">Transferred fields</label>
+                              </div>
+                              <div class="slds-form-element__control">
+                                <div class="slds-select_container">
+                                  <apex:selectList value="{! selectedCustomSObjectFieldsTransferToolBack }" size="18" multiselect="true" styleClass="slds-select selected-list-height--style" >
+                                    <apex:selectOptions value="{! CustomSObjectFieldsToDestinationList }" />
+                                  </apex:selectList>
+                                </div>
+                              </div>
+                            </div>
+                          </apex:outputPanel>
+                        </apex:panelGroup>
+                      </div>
+                      <!--/ COLUMN 3 -->
+                    </div>
+                    <!--/ NESTED GRID - CUSTOM SOBJECT FIELDS TRANSFER TOOL -->
+                  </div>
+                  <!--/ NESTED TAB _ CUSTOM SOBJECTS _ TRANSFER TOOL _ ARIA-CONTROLS -->
+                </div>
+                <!--/ NESTED TABS _ CUSTOM sOBJECTS FIELDS, FIELD DESCRIPTION, TRANSFER TOOL -->
+              </div>
+              <!--/ GRID COLUMN 2 -->
+            </div>
+            <!--/ CUSTOM sOBJECTS GRID -->
+          </div>
+          <!--/ ROOT TAB CUSTOM SOBJECTS ARIA-CONTROLS -->
+        </div>
+        <!--/ ROOT TABS -->
+      </div>
+    </apex:form>
+    <!-- / PRIMARY CONTENT WRAPPER -->
+
+    <!-- FOOTER -->
+    <footer role="contentinfo"  class="slds-p-around_large">
+      <!-- LAYOUT GRID -->
+      <div class="slds-grid slds-grid_align-spread">
+        <p class="slds-col">Salesforce Lightning Design System In Visualforce</p>
+        <p class="slds-col">&copy;  Viacheslav Dudkin</p>
+      </div>
+      <!-- / LAYOUT GRID -->
+    </footer>
+    <!-- / FOOTER -->
+
+  </div>
+  <!-- / REQUIRED SLDS WRAPPER -->
+
+  <!-- CSS -->
+  <style>
+  .custom-top-margin--style {
+    margin-top: 115px;
+ }
+ .selected-list-height--style {
+   height: 595px !important;
+ }
+  .transfer-tool-button--style {
+    width: 40px;
+    height: 40px;
+ }
+  </style>
+  <!--/ CSS -->
+
+  <!-- JAVASCRIPT -->
+  <script>
+    function switchRootTabs(event) {
+      debugger
+      var source = event.target;
+      var ulParentElement = source.parentElement.parentElement;
+
+      ulParentElement.childNodes.forEach(function(item){
+        if(item.classList) item.classList.remove("slds-is-active");
+      });
+
+      var liParent = source.parentElement;
+      liParent.classList.add("slds-is-active");
+
+      var targetAttribute = source.getAttribute("connector");
+
+      var divParentElement = ulParentElement.parentElement;
+      divParentElement.childNodes.forEach(function(item) {
+        if(item.tagName == "DIV") {
+          var divAttribute = item.getAttribute("connector");
+          if(divAttribute == targetAttribute) {
+            item.classList.remove("slds-hide");
+            item.classList.add("slds-show");
+          }
+          if(divAttribute != targetAttribute) {
+            item.classList.remove("slds-show");
+            item.classList.add("slds-hide");
+          }
+        }
+      });
+    }
+  </script>
+  <!-- / JAVASCRIPT -->
+
+  </body>
+  </html>
+</apex:page>

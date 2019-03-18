@@ -1,0 +1,4 @@
+<aura:event type="APPLICATION" description="Sends the name of the selected sObject to other components." access="public">
+  <aura:attribute name="sObjectName" type="String" required="true" access="public" />
+  <aura:attribute name="componentKey" type="String" required="true" default="undefined" access="public" description="See description in the c:sObjectList.design file."/>
+</aura:event>

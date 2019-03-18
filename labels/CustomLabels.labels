@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
+    <labels>
+        <fullName>Creator</fullName>
+        <categories>Viacheslav Dudkin</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Creator</shortDescription>
+        <value>©  Viacheslav Dudkin</value>
+    </labels>
+    <labels>
+        <fullName>Custom_SObjects</fullName>
+        <categories>Main Custom sObjects List</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Custom SObjects</shortDescription>
+        <value>Org Custom sObjects</value>
+    </labels>
+    <labels>
+        <fullName>Custom_fields_fieldsInfo</fullName>
+        <categories>Selected standard sObject fields &amp; fields description</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Custom fields fieldsInfo</shortDescription>
+        <value>Custom sObject Fields And Fields Description</value>
+    </labels>
+    <labels>
+        <fullName>Custom_root_tab</fullName>
+        <categories>Root Tab</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Custom root tab</shortDescription>
+        <value>Custom sObjects Root Tab</value>
+    </labels>
+    <labels>
+        <fullName>Custom_transfer_tool</fullName>
+        <categories>Transfer Tool</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Custom transfer tool</shortDescription>
+        <value>Custom sObject Fields Transfer Tool</value>
+    </labels>
+    <labels>
+        <fullName>Dynamic_Selected_sObject</fullName>
+        <categories>Dynamic label part</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Dynamic Selected sObject</shortDescription>
+        <value>&lt;selected sObject&gt;</value>
+    </labels>
+    <labels>
+        <fullName>Dynamic_available</fullName>
+        <categories>Dynamic label part</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Dynamic available</shortDescription>
+        <value>Available</value>
+    </labels>
+    <labels>
+        <fullName>Dynamic_fields</fullName>
+        <categories>Dynamic label part</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Dynamic fields</shortDescription>
+        <value>fields</value>
+    </labels>
+    <labels>
+        <fullName>Dynamic_selected</fullName>
+        <categories>Dynamic label part</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Dynamic selected</shortDescription>
+        <value>Selected</value>
+    </labels>
+    <labels>
+        <fullName>Footer_SLDS_in_VF</fullName>
+        <categories>Footer</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Footer SLDS in VF</shortDescription>
+        <value>Salesforce Lightning Design System In Visualforce</value>
+    </labels>
+    <labels>
+        <fullName>Html_head_title</fullName>
+        <categories>HTML head title</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Html head title</shortDescription>
+        <value>Metadata processing visualforce page with SLDS</value>
+    </labels>
+    <labels>
+        <fullName>Label</fullName>
+        <categories>sObject field</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Label</shortDescription>
+        <value>Label</value>
+    </labels>
+    <labels>
+        <fullName>Move_all_fields_to_available_list</fullName>
+        <categories>Transfer tool buttons slds-assistive-text</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Move all fields to available list</shortDescription>
+        <value>Move all fields to Available list</value>
+    </labels>
+    <labels>
+        <fullName>Move_all_fields_to_selected_list</fullName>
+        <categories>Transfer tool buttons slds-assistive-text</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Move all fields to selected list</shortDescription>
+        <value>Move all fields to Selected list</value>
+    </labels>
+    <labels>
+        <fullName>Move_several_fields_to_available_list</fullName>
+        <categories>Transfer tool buttons slds-assistive-text</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Move several fields to available list</shortDescription>
+        <value>Move several fields to Available list</value>
+    </labels>
+    <labels>
+        <fullName>Move_several_fields_to_selected_list</fullName>
+        <categories>Transfer tool buttons slds-assistive-text</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Move several fields to selected list</shortDescription>
+        <value>Move several fields to Selected list</value>
+    </labels>
+    <labels>
+        <fullName>Name</fullName>
+        <categories>sObject field</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Name</shortDescription>
+        <value>Name</value>
+    </labels>
+    <labels>
+        <fullName>Page_head</fullName>
+        <categories>Metadata processing</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Page head</shortDescription>
+        <value>Metadata processing</value>
+    </labels>
+    <labels>
+        <fullName>Selected_sObject_fields</fullName>
+        <categories>Lists of fields of the selected sObject</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Selected sObject fields</shortDescription>
+        <value>Selected sObject fields</value>
+    </labels>
+    <labels>
+        <fullName>Standard_SObjects</fullName>
+        <categories>Main Standard sObjects List</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Standard_SObjects</shortDescription>
+        <value>Org Standard sObjects</value>
+    </labels>
+    <labels>
+        <fullName>Standard_fields_fieldsInfo</fullName>
+        <categories>Selected standard sObject fields &amp; fields description</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Standard fields fieldsInfo</shortDescription>
+        <value>Standard sObject Fields And Fields Description</value>
+    </labels>
+    <labels>
+        <fullName>Standard_root_tab</fullName>
+        <categories>Root Tab</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Standard_root_tab</shortDescription>
+        <value>Standard sObjects Root Tab</value>
+    </labels>
+    <labels>
+        <fullName>Standard_transfer_tool</fullName>
+        <categories>Transfer Tool</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Standard transfer tool</shortDescription>
+        <value>Standard sObject Fields Transfer Tool</value>
+    </labels>
+    <labels>
+        <fullName>Type</fullName>
+        <categories>sObject field</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Type</shortDescription>
+        <value>Type</value>
+    </labels>
+    <labels>
+        <fullName>isAccessible</fullName>
+        <categories>sObject field FLS</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>isAccessible</shortDescription>
+        <value>isAccessible?</value>
+    </labels>
+    <labels>
+        <fullName>isCreateable</fullName>
+        <categories>sObject field FLS</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>isCreateable</shortDescription>
+        <value>isCreateable?</value>
+    </labels>
+    <labels>
+        <fullName>isUpdateable</fullName>
+        <categories>sObject field FLS</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>isUpdateable</shortDescription>
+        <value>isUpdateable?</value>
+    </labels>
+</CustomLabels>

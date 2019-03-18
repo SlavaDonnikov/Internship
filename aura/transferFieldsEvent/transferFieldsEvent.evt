@@ -1,0 +1,4 @@
+<aura:event type="COMPONENT" description="Used for transferring fields from one list to another in 'customTransferTool' component.">
+  <aura:attribute name="fieldsInTransfer" type="String[]"/>
+  <aura:attribute name="list" type="String"/>
+</aura:event>

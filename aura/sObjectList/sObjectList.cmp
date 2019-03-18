@@ -1,0 +1,29 @@
+<aura:component controller="MetadataProcessingController" implements="flexipage:availableForAllPageTypes" access="public" description="List for displaying sObjects metadata.">
+  <aura:attribute name="sObjectType" type="String" default="Standard" required="true" description="Determines which type of sObjects will be loaded into this list."/>
+  <aura:attribute name="componentKey" type="String" required="true" default="undefined" description="See description in the corresponding aura:design file."/>
+  <aura:attribute name="label" type="String" default="Please enter the label" required="true" description="User-selectable label above the list."/>
+  <aura:attribute name="sObjects" type="String[]" description="List sObjects that are displayed in this component. Populated by 'doInit' event." />
+
+  <aura:handler name="init" value="{! this }" action="{! c.doInit }"/>
+  <aura:registerEvent name="sendSObjectEvent" type="c:sendSObjectEvent" />
+
+  <div class="slds-scope">
+    <div class="slds-align_absolute-center slds-m-bottom_xx-small">
+      <label class="slds-form-element__label">{! v.label }</label>
+    </div>
+    <div class="slds-scrollable_y no-webkit-focus lightning-select-style" tabindex="0">
+      <table role="grid" class="slds-table slds-table_fixed-layout slds-table_cell-buffer slds-no-row-hover slds-max-medium-table--stacked-horizontal">
+        <tbody onclick="{! c.selectAndSend }">
+        <aura:iteration items="{! v.sObjects }" var="sObject">
+          <tr>
+            <th aura:id="thId" data-id="{!sObject}" scope="row">
+              <div class="slds-truncate" data-id="{!sObject}" >{! sObject }</div>
+            </th>
+          </tr>
+        </aura:iteration>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</aura:component>

@@ -1,0 +1,4 @@
+<aura:event type="COMPONENT" description="Sends the name of the selected sObject and the name of the selected field of sObject to 'sObjectFieldsAndDetails' parent component." access="public">
+  <aura:attribute name="sObjectName" type="String" required="true" />
+  <aura:attribute name="sObjectFieldName" type="String" required="true"/>
+</aura:event>

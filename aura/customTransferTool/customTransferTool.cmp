@@ -1,0 +1,50 @@
+<aura:component controller="MetadataProcessingController" implements="flexipage:availableForAllPageTypes" description="Custom realization of lightning:dualListBox">
+  <aura:attribute name="componentKey" type="String" default="undefined" required="true" description="See description in the corresponding aura:design file."/>
+  <aura:attribute name="componentLabel" type="String" default="Tool Label" required="true" />
+  <aura:attribute name="availableOptions" type="String" default="Available Options" required="true"/>
+  <aura:attribute name="selectedOptions" type="String" default="Selected Options" required="true"/>
+
+  <!-- Application event handler (sendSObjectEvent) -->
+  <aura:handler event="c:sendSObjectEvent" action="{! c.getSObjectFields }" />
+
+  <!-- Component event handler (transferFieldsEvent) -->
+  <aura:handler name="transferSeveralFields" event="c:transferFieldsEvent" action="{! c.processTransferredFields }"/>
+  <aura:handler name="transferAllFields" event="c:transferFieldsEvent" action="{! c.processTransferredAllFields }"/>
+
+  <lightning:layout multipleRows="false">
+    <lightning:layoutItem class="slds-m-left--x-small slds-m-bottom--large" flexibility="grow" size="12" largeDeviceSize="12" mediumDeviceSize="6">
+      <div class="slds-form-element__label slds-form-element__legend slds-text-title_caps">{! v.componentLabel }</div>
+    </lightning:layoutItem>
+  </lightning:layout>
+  <lightning:layout multipleRows="false" >
+    <lightning:layoutItem class="slds-m-left--xx-small" flexibility="grow" size="3" largeDeviceSize="3" mediumDeviceSize="1.5">
+      <c:duelingHalfList aura:id="list1" label="{! v.availableOptions }" />
+    </lightning:layoutItem>
+    <lightning:layoutItem class="slds-m-top--large" flexibility="no-grow" size="1" largeDeviceSize="1" mediumDeviceSize="0.5">
+      <div class="slds-box slds-align_absolute-center button-set-style" >
+        <div class="slds-dueling-list__column dueling-picklist-buttons-margin-center" >
+          <!-- slds-button_icon-border-filled -->
+          <button class="slds-button slds-button_icon slds-button_icon-container" onclick="{! c.allForward }">
+            <lightning:icon iconName="utility:right" size="x-small"/>
+          </button>
+          <button class="slds-button slds-button_icon slds-button_icon-container" onclick="{! c.severalForward }">
+            <lightning:icon iconName="utility:chevronright" size="x-small"/>
+          </button>
+          <button class="slds-button slds-button_icon slds-button_icon-container" onclick="{! c.severalBack }">
+            <lightning:icon iconName="utility:chevronleft" size="x-small"/>
+          </button>
+          <button class="slds-button slds-button_icon slds-button_icon-container" onclick="{! c.allBack }">
+            <lightning:icon iconName="utility:left" size="x-small"/>
+          </button>
+        </div>
+      </div>
+    </lightning:layoutItem>
+    <lightning:layoutItem flexibility="grow" size="3" largeDeviceSize="3" mediumDeviceSize="1.5">
+      <c:duelingHalfList aura:id="list2" label="{! v.selectedOptions }"/>
+    </lightning:layoutItem>
+  </lightning:layout>
+
+
+
+
+</aura:component>

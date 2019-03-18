@@ -1,0 +1,378 @@
+<apex:page controller="metadataJSRemotingVFController" standardStylesheets="false" lightningStyleSheets="true" showHeader="false" sidebar="false" applyHtmlTag="false" applyBodyTag="false" docType="html-5.0">
+  <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+    <title>{! $Label.Html_head_title }</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link href="{!URLFOR($Resource.JSvCSSvRemoteAction, 'JSandCSS/styles/appCSS.css')}" rel="stylesheet" type="text/css"/>
+    <script src="{!URLFOR($Resource.JSvCSSvRemoteAction, 'JSandCSS/scripts/appJS.js')}" type="text/javascript"></script>
+    <apex:slds />
+  </head>
+  <body>
+  <!-- REQUIRED SLDS WRAPPER -->
+  <div class="slds-scope">
+    <!-- HEADING -->
+    <p class="slds-text-heading_label slds-m-top_xx-small slds-m-left_large slds-m-bottom_small"> {! $Label.Page_head } </p>
+    <!--/ HEADING -->
+    <!-- PRIMARY CONTENT WRAPPER -->
+    <div class="slds-p-horizontal_medium">
+      <!-- ROOT TABS -->
+      <div class="slds-tabs_default">
+        <ul class="slds-tabs_default__nav" role="tablist">
+          <li class="slds-m-right_xxx-small slds-tabs_default__item slds-is-active" title="Standard sObject Root" role="presentation" id="tab-root-standard">
+            <a class="slds-tabs_default__link" href="javascript:void(0);" onclick="switchTabs(event);return false;" role="tab" tabindex="0" connector="tab1"
+               aria-selected="true" aria-controls="tab-root-standard-content" id="tab-root-standard-a">{! $Label.Standard_root_tab }</a>
+          </li>
+          <li class="slds-tabs_default__item" title="Custom sObject Root" role="presentation" id="tab-root-custom">
+            <a class="slds-tabs_default__link" href="javascript:void(0);" onclick="switchTabs(event);return false;" role="tab" tabindex="-1" connector="tab2"
+               aria-selected="false" aria-controls="tab-root-custom-content" id="tab-root-custom-a">{! $Label.Custom_root_tab }</a>
+          </li>
+        </ul>
+        <!-- ROOT TAB STANDARD SOBJECTS ARIA-CONTROLS -->
+        <div id="tab-root-standard-content" connector="tab1" class="slds-tabs_default__content slds-show" role="tabpanel" aria-labelledby="tab-root-standard-a">
+          <!-- STANDARD sOBJECTS GRID -->
+          <div class="slds-grid slds-gutters">
+            <!-- GRID COLUMN 1 -->
+            <div class="slds-col slds-size_1-of-4">
+              <!-- ALL ORG STANDARD SOBJECT LIST -->
+              <div class="slds-m-top_small" >
+                <div class="slds-align_absolute-center">
+                  <label class="slds-form-element__label">{! $Label.Standard_SObjects }</label>
+                </div>
+                <div id="mainStandardSObjectList" class="slds-scrollable_y select-list_sObjects--style" tabindex="0">
+                  <table role="grid" class="slds-table slds-table_fixed-layout slds-table_cell-buffer slds-no-row-hover">
+                    <tbody id="standardSObjectTable">
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <!--/ ALL ORG STANDARD SOBJECT LIST -->
+            </div>
+            <!--/ GRID COLUMN 1 -->
+            <!-- GRID COLUMN 2 -->
+            <div class="slds-col slds-size_3-of-4 slds-m-left_x-large">
+              <!-- NESTED TABS _ STANDARD sOBJECTS FIELDS, FIELD DESCRIPTION, TRANSFER TOOL -->
+              <div class="slds-tabs_default">
+                <ul class="slds-tabs_default__nav" role="tablist">
+                  <li class="slds-m-right_xxx-small slds-tabs_default__item slds-is-active" title="Item One" role="presentation" id="tab-nested-standard-fields-and-description">
+                    <a class="slds-tabs_default__link" href="javascript:void(0);" onclick="switchTabs(event);return false;" role="tab" tabindex="0" connector="tab1"
+                       aria-selected="true" aria-controls="tab-nested-standard-fields-details" id="tab-nested-standard-fields-details-a">{! $Label.Standard_fields_fieldsInfo }</a>
+                  </li>
+                  <li class="slds-tabs_default__item" title="Item Two" role="presentation" id="tab-nested-standard-transfer-tool">
+                    <a class="slds-tabs_default__link" href="javascript:void(0);" onclick="switchTabs(event);return false;" role="tab" tabindex="-1" connector="tab2"
+                       aria-selected="false" aria-controls="tab-nested-standard-transfer-tool" id="tab-nested-standard-transfer-tool-a">{! $Label.Standard_transfer_tool }</a>
+                  </li>
+                </ul>
+                <!-- NESTED TAB _ STANDARD SOBJECTS FIELDS & FIELDS DESCRIPTION _ ARIA-CONTROLS -->
+                <div id="tab-nested-standard-fields-details" connector="tab1" class="slds-tabs_default__content slds-show" role="tabpanel" aria-labelledby="tab-nested-standard-fields-details-a">
+                  <!-- NESTED GRID - STANDARD SOBJECTS FIELDS AND FIELD DESCRIPTION -->
+                  <div class="slds-grid slds-gutters">
+                    <!-- NESTED GRID COLUMN 1 -->
+                    <div class="slds-col slds-size_1-of-4 slds-m-top_small">
+                      <!-- SELECTED STANDARD SOBJECT FIELDS LIST -->
+                      <div>
+                        <div class="slds-align_absolute-center">
+                          <label class="slds-form-element__label">{! $Label.Selected_sObject_fields }</label>
+                        </div>
+                        <div id="mainStandardSObjectFieldsList" class="slds-scrollable_y select-list_sObjectFields--style" tabindex="0">
+                          <table role="grid" class="slds-table slds-table_fixed-layout slds-table_cell-buffer slds-no-row-hover">
+                            <tbody id="standardSObjectFieldsTable">
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                      <!--/ SELECTED STANDARD SOBJECT FIELDS LIST -->
+                    </div>
+                    <!--/ NESTED GRID COLUMN 1 -->
+                    <!-- NESTED GRID COLUMN 2 -->
+                    <div class="slds-col slds-size_2-of-4 slds-m-left_medium slds-m-top_x-large">
+                      <!-- SELECTED STANDARD SOBJECT FIELDS DESCRIPTION -->
+                      <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                        <thead>
+                        <tr class="slds-text-title_caps">
+                          <th scope="col">
+                            <div class="slds-truncate" title="Field Label">{! $Label.Label }</div>
+                          </th>
+                          <th scope="col">
+                            <div class="slds-truncate" title="Field Name">{! $Label.Name }</div>
+                          </th>
+                          <th scope="col">
+                            <div class="slds-truncate" title="Field Type">{! $Label.Type }</div>
+                          </th>
+                          <th scope="col">
+                            <div class="slds-truncate slds-align_absolute-center" title="Is Field Accessible ?">{! $Label.isAccessible }</div>
+                          </th>
+                          <th scope="col">
+                            <div class="slds-truncate slds-align_absolute-center" title="Is Field Createable ?">{! $Label.isCreateable }</div>
+                          </th>
+                          <th scope="col">
+                            <div class="slds-truncate slds-align_absolute-center" title="Is Field Updateable ?">{! $Label.isUpdateable }</div>
+                          </th>
+                        </tr>
+                        </thead>
+                        <tbody id="standardSObjectFieldsDetails">
+                        </tbody>
+                      </table>
+                      <!--/ SELECTED STANDARD SOBJECT FIELDS DESCRIPTION -->
+                    </div>
+                    <!--/ NESTED GRID COLUMN 2 -->
+                  </div>
+                  <!--/ NESTED GRID - STANDARD SOBJECTS FIELDS AND FIELD DESCRIPTION -->
+                </div>
+                <!--/ NESTED TAB _ STANDARD SOBJECTS FIELDS & FIELDS DESCRIPTION _ ARIA-CONTROLS -->
+                <!-- NESTED TAB _ STANDARD SOBJECTS _ TRANSFER TOOL _ ARIA-CONTROLS -->
+                <div id="tab-nested-standard-transfer-tool" connector="tab2" class="slds-tabs_default__content slds-hide" role="tabpanel" aria-labelledby="tab-nested-standard-transfer-tool-a">
+                  <!-- NESTED GRID - STANDARD SOBJECT FIELDS TRANSFER TOOL -->
+                  <div class="slds-grid slds-gutters slds-m-top_small">
+                    <!-- SLDS COLUMN 1 _ TRANSFER TOOL -->
+                    <div class="slds-col slds-size_6-of-8">
+                      <!-- SLDS DUELING PICKLIST -->
+                      <div class="slds-form-element" role="group" aria-labelledby="picklist-group-label">
+                        <div class="slds-dueling-list">
+                          <!-- STANDARD TRANSFER TOOL INITIAL LIST -->
+                          <div class="slds-dueling-list__column">
+                            <span id="label-01" class="slds-form-element__label slds-align_absolute-center" >{! $Label.Dynamic_available + ' ' + $Label.Dynamic_fields }</span>
+                            <div class="slds-dueling-list__options">
+                              <ul id="standardTransferToolInitialList" aria-describedby="option-drag-label" aria-labelledby="label-01" aria-multiselectable="true" class="slds-listbox slds-listbox_vertical" role="listbox">
+                              </ul>
+                            </div>
+                          </div>
+                          <!--/ STANDARD TRANSFER TOOL INITIAL LIST -->
+                          <!-- STANDARD TRANSFER TOOL BUTTONS -->
+                          <div class="slds-dueling-list__column dueling-picklist-buttons-margin-center">
+                            <button id="standardAllForward" class="slds-button slds-button_icon slds-button_icon-container" onclick="transferAllFields(event);return false;">
+                              <svg class="slds-button__icon" aria-hidden="true">
+                                <use xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#right"></use>
+                              </svg>
+                              <span class="slds-assistive-text">{! $Label.Move_all_fields_to_selected_list }</span>
+                            </button>
+                            <button id="standardSeveralForward" class="slds-button slds-button_icon slds-button_icon-container" onclick="transferSeveralFields(event);return false;">
+                              <svg class="slds-button__icon" aria-hidden="true">
+                                <use xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#chevronright"></use>
+                              </svg>
+                              <span class="slds-assistive-text">{! $Label.Move_several_fields_to_selected_list }</span>
+                            </button>
+                            <button id="standardSeveralBack" class="slds-button slds-button_icon slds-button_icon-container" onclick="transferSeveralFields(event);return false;">
+                              <svg class="slds-button__icon" aria-hidden="true">
+                                <use xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#chevronleft"></use>
+                              </svg>
+                              <span class="slds-assistive-text">{! $Label.Move_several_fields_to_available_list }</span>
+                            </button>
+                            <button id="standardAllBack" class="slds-button slds-button_icon slds-button_icon-container" onclick="transferAllFields(event);return false;">
+                              <svg class="slds-button__icon" aria-hidden="true">
+                                <use xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#left"></use>
+                              </svg>
+                              <span class="slds-assistive-text">{! $Label.Move_all_fields_to_available_list }</span>
+                            </button>
+                          </div>
+                          <!--/ STANDARD TRANSFER TOOL BUTTONS -->
+                          <!-- STANDARD TRANSFER TOOL DESTINATION LIST -->
+                          <div class="slds-dueling-list__column">
+                            <span id="label-02" class="slds-form-element__label slds-align_absolute-center">{! $Label.Dynamic_selected + ' ' + $Label.Dynamic_fields }</span>
+                            <div class="slds-dueling-list__options">
+                              <ul id="standardTransferToolDestinationList" aria-describedby="option-drag-label" aria-labelledby="label-02" aria-multiselectable="true" class="slds-listbox slds-listbox_vertical" role="listbox">
+                              </ul>
+                            </div>
+                          </div>
+                          <!--/ STANDARD TRANSFER TOOL DESTINATION LIST -->
+                        </div>
+                      </div>
+                      <!--/ SLDS DUELING PICKLIST  -->
+                    </div>
+                    <!--/ SLDS COLUMN 1 TRANSFER TOOL -->
+                  </div>
+                  <!--/ NESTED GRID - STANDARD SOBJECT FIELDS TRANSFER TOOL -->
+                </div>
+                <!--/ NESTED TAB _ STANDARD SOBJECTS _ TRANSFER TOOL _ ARIA-CONTROLS -->
+              </div>
+              <!--/ NESTED TABS _ STANDARD sOBJECTS FIELDS, FIELD DESCRIPTION, TRANSFER TOOL -->
+            </div>
+            <!--/ GRID COLUMN 2 -->
+          </div>
+          <!--/ STANDARD sOBJECTS GRID -->
+        </div>
+        <!--/ ROOT TAB STANDARD SOBJECTS ARIA-CONTROLS -->
+        <!-- ROOT TAB CUSTOM SOBJECTS ARIA-CONTROLS -->
+        <div id="tab-root-custom-content" connector="tab2" class="slds-tabs_default__content slds-hide" role="tabpanel" aria-labelledby="tab-root-custom-a">
+          <!-- CUSTOM sOBJECTS GRID -->
+          <div class="slds-grid slds-gutters">
+            <!-- GRID COLUMN 1 -->
+            <div class="slds-col slds-size_1-of-4">
+              <!-- ALL ORG CUSTOM SOBJECT LIST -->
+              <div class="slds-m-top_small">
+                <div class="slds-align_absolute-center">
+                  <label class="slds-form-element__label">{! $Label.Custom_SObjects }</label>
+                </div>
+                <div id="mainCustomSObjectList" class="slds-scrollable_y select-list_sObjects--style" tabindex="0">
+                  <table role="grid" class="slds-table slds-table_fixed-layout slds-table_cell-buffer slds-no-row-hover">
+                    <tbody id="customSObjectTable">
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <!--/ ALL ORG CUSTOM SOBJECT LIST -->
+            </div>
+            <!--/ GRID COLUMN 1 -->
+            <!-- GRID COLUMN 2 -->
+            <div class="slds-col slds-size_3-of-4 slds-m-left_x-large">
+              <!-- NESTED TABS _ CUSTOM sOBJECTS FIELDS, FIELD DESCRIPTION, TRANSFER TOOL -->
+              <div class="slds-tabs_default">
+                <ul class="slds-tabs_default__nav" role="tablist">
+                  <li class="slds-m-right_xxx-small slds-tabs_default__item slds-is-active" title="Item One" role="presentation" id="tab-nested-custom-fields-and-description">
+                    <a class="slds-tabs_default__link" href="javascript:void(0);" onclick="switchTabs(event);return false;" role="tab" tabindex="0" connector="tab1"
+                       aria-selected="true" aria-controls="tab-nested-custom-fields-details" id="tab-nested-custom-fields-details-a">{! $Label.Custom_fields_fieldsInfo }</a>
+                  </li>
+                  <li class="slds-tabs_default__item" title="Item Two" role="presentation" id="tab-nested-custom-transfer-tool">
+                    <a class="slds-tabs_default__link" href="javascript:void(0);" onclick="switchTabs(event);return false;" role="tab" tabindex="-1" connector="tab2"
+                       aria-selected="false" aria-controls="tab-nested-custom-transfer-tool" id="tab-nested-custom-transfer-tool-a">{! $Label.Custom_transfer_tool }</a>
+                  </li>
+                </ul>
+                <!-- NESTED TAB _ CUSTOM SOBJECTS FIELDS & FIELDS DESCRIPTION _ ARIA-CONTROLS -->
+                <div id="tab-nested-custom-fields-details" connector="tab1" class="slds-tabs_default__content slds-show" role="tabpanel" aria-labelledby="tab-nested-custom-fields-details-a">
+                  <!-- NESTED GRID - CUSTOM SOBJECTS FIELDS AND FIELD DESCRIPTION -->
+                  <div class="slds-grid slds-gutters">
+                    <!-- NESTED GRID COLUMN 1 -->
+                    <div class="slds-col slds-size_1-of-4 slds-m-top_small">
+                      <!-- SELECTED CUSTOM SOBJECT FIELDS LIST -->
+                      <div>
+                        <div class="slds-align_absolute-center">
+                          <label class="slds-form-element__label">{! $Label.Selected_sObject_fields }</label>
+                        </div>
+                        <div id="mainCustomSObjectFieldsList" class="slds-scrollable_y select-list_sObjectFields--style" tabindex="0">
+                          <table role="grid" class="slds-table slds-table_fixed-layout slds-table_cell-buffer slds-no-row-hover">
+                            <tbody id="customSObjectFieldsTable">
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                      <!--/ SELECTED CUSTOM SOBJECT FIELDS LIST -->
+                    </div>
+                    <!--/ NESTED GRID COLUMN 1 -->
+                    <!-- NESTED GRID COLUMN 2 -->
+                    <div class="slds-col slds-size_2-of-4 slds-m-left_medium slds-m-top_x-large">
+                      <!-- SELECTED CUSTOM SOBJECT FIELDS DESCRIPTION -->
+                      <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                        <thead>
+                        <tr class="slds-text-title_caps">
+                          <th scope="col">
+                            <div class="slds-truncate" title="Field Label">{! $Label.Label }</div>
+                          </th>
+                          <th scope="col">
+                            <div class="slds-truncate" title="Field Name">{! $Label.Name }</div>
+                          </th>
+                          <th scope="col">
+                            <div class="slds-truncate" title="Field Type">{! $Label.Type }</div>
+                          </th>
+                          <th scope="col">
+                            <div class="slds-truncate slds-align_absolute-center" title="Is Field Accessible ?">{! $Label.isAccessible }</div>
+                          </th>
+                          <th scope="col">
+                            <div class="slds-truncate slds-align_absolute-center" title="Is Field Createable ?">{! $Label.isCreateable }</div>
+                          </th>
+                          <th scope="col">
+                            <div class="slds-truncate slds-align_absolute-center" title="Is Field Updateable ?">{! $Label.isUpdateable }</div>
+                          </th>
+                        </tr>
+                        </thead>
+                        <tbody id="customSObjectFieldsDetails">
+                        </tbody>
+                      </table>
+                      <!--/ SELECTED CUSTOM SOBJECT FIELDS DESCRIPTION -->
+                    </div>
+                    <!--/ NESTED GRID COLUMN 2 -->
+                  </div>
+                  <!--/ NESTED GRID - CUSTOM SOBJECTS FIELDS AND FIELD DESCRIPTION -->
+                </div>
+                <!--/ NESTED TAB _ CUSTOM SOBJECTS FIELDS & FIELDS DESCRIPTION _ ARIA-CONTROLS -->
+                <!-- NESTED TAB _ CUSTOM SOBJECTS _ TRANSFER TOOL _ ARIA-CONTROLS -->
+                <div id="tab-nested-custom-transfer-tool" connector="tab2" class="slds-tabs_default__content slds-hide" role="tabpanel" aria-labelledby="tab-nested-custom-transfer-tool-a">
+                  <!-- NESTED GRID - CUSTOM SOBJECT FIELDS TRANSFER TOOL -->
+                  <div class="slds-grid slds-gutters slds-m-top_small">
+                    <!-- COLUMN 1 TRANSFER TOOL-->
+                    <div class="slds-col slds-size_6-of-8">
+                      <!-- SLDS DUELING PICKLIST -->
+                      <div class="slds-form-element" role="group" aria-labelledby="picklist-group-label">
+                        <div class="slds-dueling-list">
+                          <!-- CUSTOM TRANSFER TOOL INITIAL LIST -->
+                          <div class="slds-dueling-list__column">
+                            <span id="label-01" class="slds-form-element__label slds-align_absolute-center">{! $Label.Dynamic_available + ' ' + $Label.Dynamic_fields }</span>
+                            <div class="slds-dueling-list__options">
+                              <ul id="customTransferToolInitialList" aria-describedby="option-drag-label" aria-labelledby="label-01" aria-multiselectable="true" class="slds-listbox slds-listbox_vertical" role="listbox">
+                              </ul>
+                            </div>
+                          </div>
+                          <!--/ CUSTOM TRANSFER TOOL INITIAL LIST -->
+                          <!-- CUSTOM TRANSFER TOOL BUTTONS -->
+                          <div class="slds-dueling-list__column dueling-picklist-buttons-margin-center">
+                            <button id="customAllForward" class="slds-button slds-button_icon slds-button_icon-container" onclick="transferAllFields(event);return false;">
+                              <svg class="slds-button__icon" aria-hidden="true">
+                                <use xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#right"></use>
+                              </svg>
+                              <span class="slds-assistive-text">{! $Label.Move_all_fields_to_selected_list }</span>
+                            </button>
+                            <button id="customSeveralForward" class="slds-button slds-button_icon slds-button_icon-container" onclick="transferSeveralFields(event);return false;">
+                              <svg class="slds-button__icon" aria-hidden="true">
+                                <use xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#chevronright"></use>
+                              </svg>
+                              <span class="slds-assistive-text">{! $Label.Move_several_fields_to_selected_list }</span>
+                            </button>
+                            <button id="customSeveralBack" class="slds-button slds-button_icon slds-button_icon-container" onclick="transferSeveralFields(event);return false;">
+                              <svg class="slds-button__icon" aria-hidden="true">
+                                <use xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#chevronleft"></use>
+                              </svg>
+                              <span class="slds-assistive-text">{! $Label.Move_several_fields_to_available_list }</span>
+                            </button>
+                            <button id="customAllBack" class="slds-button slds-button_icon slds-button_icon-container" onclick="transferAllFields(event);return false;">
+                              <svg class="slds-button__icon" aria-hidden="true">
+                                <use xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#left"></use>
+                              </svg>
+                              <span class="slds-assistive-text">{! $Label.Move_all_fields_to_available_list }</span>
+                            </button>
+                          </div>
+                          <!--/ CUSTOM TRANSFER TOOL BUTTONS -->
+                          <!-- CUSTOM TRANSFER TOOL DESTINATION LIST -->
+                          <div class="slds-dueling-list__column">
+                            <span id="label-02" class="slds-form-element__label slds-align_absolute-center">{! $Label.Dynamic_selected + ' ' + $Label.Dynamic_fields }</span>
+                            <div class="slds-dueling-list__options">
+                              <ul id="customTransferToolDestinationList" aria-describedby="option-drag-label" aria-labelledby="label-02" aria-multiselectable="true" class="slds-listbox slds-listbox_vertical" role="listbox">
+                              </ul>
+                            </div>
+                          </div>
+                          <!-- CUSTOM TRANSFER TOOL DESTINATION LIST -->
+                        </div>
+                      </div>
+                      <!--/ SLDS DUELING PICKLIST -->
+                    </div>
+                    <!--/ COLUMN 1 TRANSFER TOOL-->
+                  </div>
+                  <!--/ NESTED GRID - CUSTOM SOBJECT FIELDS TRANSFER TOOL -->
+                </div>
+                <!--/ NESTED TAB _ CUSTOM SOBJECTS _ TRANSFER TOOL _ ARIA-CONTROLS -->
+              </div>
+              <!--/ NESTED TABS _ CUSTOM sOBJECTS FIELDS, FIELD DESCRIPTION, TRANSFER TOOL -->
+            </div>
+            <!--/ GRID COLUMN 2 -->
+          </div>
+          <!--/ CUSTOM sOBJECTS GRID -->
+        </div>
+        <!--/ ROOT TAB CUSTOM SOBJECTS ARIA-CONTROLS -->
+      </div>
+      <!--/ ROOT TABS -->
+    </div>
+    <!--/ PRIMARY CONTENT WRAPPER -->
+    <!-- FOOTER -->
+    <footer role="contentinfo" class="slds-p-around_large">
+      <!-- LAYOUT GRID -->
+      <div class="slds-grid slds-grid_align-spread">
+        <p class="slds-col">{! $Label.Footer_SLDS_in_VF }</p>
+        <p class="slds-col">{! $Label.Creator }</p>
+      </div>
+      <!--/ LAYOUT GRID -->
+    </footer>
+    <!--/ FOOTER -->
+  </div>
+  <!--/ REQUIRED SLDS WRAPPER -->
+  </body>
+  </html>
+</apex:page>
